@@ -2,8 +2,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*; 
 
+
 public class Calculator implements ActionListener
-{
+{                                                                       
 
     JFrame frame;
     JTextField textfield;
@@ -18,16 +19,17 @@ public class Calculator implements ActionListener
     JPanel panel;
 
     
-    Font largeFont = new Font("Monospaced", Font.BOLD, 40);
-    Font myFont = new Font("Monospaced", Font.BOLD, 20);
+    Font largeFont = new Font("SansSerif", Font.BOLD, 40);
+    Font myFont = new Font("SansSerif", Font.BOLD, 20);
     double num1=0, num2=0, result=0;
     char operator;
-
+  
     Calculator() 
     {
         frame = new JFrame("Advanced Calculator");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(720, 999);
+        frame.getContentPane().setBackground(Color.decode("#1c1c1c"));
         frame.setLayout(null);
         frame.setVisible(true);
         
@@ -35,42 +37,81 @@ public class Calculator implements ActionListener
         textfield.setBounds(50, 30, 590, 89);
         textfield.setFont(largeFont);
         textfield.setEditable(false);
+        textfield.setBackground(Color.decode("#1c1c1c"));
+        textfield.setForeground(Color.WHITE);
+        textfield.setBorder(BorderFactory.createEmptyBorder());
         
-        addButton = new JButton("+");
-        subButton = new JButton("-");
-        multiButton = new JButton("*");
-        divButton = new JButton("÷");
-        decimalButton = new JButton(".");
-        equalButton = new JButton("=");
-        openparenthesisButton = new JButton("(");
-        closeparenthesisButton = new JButton(")");
-        percentageButton = new JButton("%");
-        positivenegativeButton = new JButton("±");
-        shiftButton = new JButton("SHIFT");
-        minmaxButton = new JButton("MinMax");
-        absoluteButton = new JButton("ABS");
-        roundButton = new JButton("ROUND");
-        delButton = new JButton("DEL");
-        clearButton = new JButton("AC/ON");
-        yButton = new JButton("y");
-        xButton = new JButton("x");
-        summationButton = new JButton("∑");
-        capitalpiButton = new JButton("Π");
-        integralButton = new JButton("∫");
-        modulusButton = new JButton("|x|");
-        ceilButton = new JButton("⌈ x ⌉");
-        floorButton = new JButton("⌊ x ⌋");
-        lowercasepiButton = new JButton("π");
-        sinButton = new JButton("sin");
-        cosButton = new JButton("cos");
-        tanButton = new JButton("tan");
-        squarerootButton = new JButton("√");
-        permutationButton = new JButton("nPr");
-        combinationButton = new JButton("nCr");
-        factorialButton = new JButton("!");
-        customexponentButton = new JButton("xʸ");
-        logarithmButton = new JButton("logₙy");
-
+        addButton = new Design("+", 30);
+        subButton = new Design("-", 30);
+        multiButton = new Design("×", 30);
+        divButton = new Design("÷", 30);
+        decimalButton = new Design(".", 30);
+        equalButton = new Design("=", 30);
+        openparenthesisButton = new Design("(", 30);
+        closeparenthesisButton = new Design(")", 30);
+        percentageButton = new Design("%", 30);
+        positivenegativeButton = new Design("±", 30);
+        shiftButton = new Design ("SHIFT", 20);
+        minmaxButton = new Design("MinMax", 20);
+        absoluteButton = new Design("ABS", 20);
+        roundButton = new Design("ROUND", 20);
+        delButton = new Design("DEL", 20);
+        clearButton = new Design("AC/ON", 20);
+        yButton = new Design("y", 20);
+        xButton = new Design("x", 20);
+        summationButton = new Design("∑", 20);
+        capitalpiButton = new Design("Π", 20);
+        integralButton = new Design("∫", 20);
+        modulusButton = new Design("|x|", 20);
+        ceilButton = new Design("⌈ x ⌉", 20);
+        floorButton = new Design("⌊ x ⌋", 20);
+        lowercasepiButton = new Design("π", 20);
+        sinButton = new Design("sin", 20);
+        cosButton = new Design("cos", 20);
+        tanButton = new Design("tan", 20);
+        squarerootButton = new Design("√", 20);
+        permutationButton = new Design("nPr", 20);
+        combinationButton = new Design("nCr", 20);
+        factorialButton = new Design("!", 20);
+        customexponentButton = new Design("xʸ", 20);
+        logarithmButton = new Design("logₙy", 20);
+        
+        addButton.setBackground(Color.decode("#ff9500"));
+        subButton.setBackground(Color.decode("#ff9500"));
+        multiButton.setBackground(Color.decode("#ff9500"));
+        divButton.setBackground(Color.decode("#ff9500"));
+        percentageButton.setBackground(Color.decode("#ff9500"));
+        equalButton.setBackground(Color.decode("#ff9500"));
+        decimalButton.setBackground(Color.decode("#ff9500"));
+        positivenegativeButton.setBackground(Color.decode("#ff9500"));
+        closeparenthesisButton.setBackground(Color.decode("#ff9500"));
+        openparenthesisButton.setBackground(Color.decode("#ff9500"));
+        shiftButton.setBackground(Color.decode("#505050"));
+        minmaxButton.setBackground(Color.decode("#505050"));
+        absoluteButton.setBackground(Color.decode("#505050"));
+        roundButton.setBackground(Color.decode("#505050"));
+        delButton.setBackground(Color.decode("#505050"));
+        clearButton.setBackground(Color.decode("#505050"));
+        yButton.setBackground(Color.decode("#505050"));
+        xButton.setBackground(Color.decode("#505050"));
+        summationButton.setBackground(Color.decode("#505050"));
+        capitalpiButton.setBackground(Color.decode("#505050"));
+        integralButton.setBackground(Color.decode("#505050"));
+        modulusButton.setBackground(Color.decode("#505050"));
+        ceilButton.setBackground(Color.decode("#505050"));
+        floorButton.setBackground(Color.decode("#505050"));
+        lowercasepiButton.setBackground(Color.decode("#505050"));
+        sinButton.setBackground(Color.decode("#505050"));
+        cosButton.setBackground(Color.decode("#505050"));
+        tanButton.setBackground(Color.decode("#505050"));
+        squarerootButton.setBackground(Color.decode("#505050"));
+        permutationButton.setBackground(Color.decode("#505050"));
+        combinationButton.setBackground(Color.decode("#505050"));
+        factorialButton.setBackground(Color.decode("#505050"));
+        customexponentButton.setBackground(Color.decode("#505050"));
+        logarithmButton.setBackground(Color.decode("#505050"));
+        
+        
         functionButtons[0] = addButton;
         functionButtons[1] = subButton;
         functionButtons[2] = multiButton;
@@ -105,18 +146,19 @@ public class Calculator implements ActionListener
         functionButtons[31] = factorialButton;
         functionButtons[32] = customexponentButton;
         functionButtons[33] = logarithmButton;
-        
-        
+                
     for(int i=0; i<34; i++){
         functionButtons[i].addActionListener(this);
-        functionButtons[i].setFont(myFont);
+        functionButtons[i].setFont(myFont); 
+        functionButtons[i].setForeground(Color.WHITE);
         functionButtons[i].setFocusable(false);
     }
 
     for(int i=0; i<10; i++){
-        numberButtons[i] = new JButton(String.valueOf(i));
+        numberButtons[i] = new Design(String.valueOf(i), 30);
         numberButtons[i].addActionListener(this);
         numberButtons[i].setFont(myFont);
+        numberButtons[i].setBackground(Color.decode("#d4d4d2"));
         numberButtons[i].setFocusable(false);
     }
 
@@ -144,13 +186,11 @@ public class Calculator implements ActionListener
         factorialButton.setBounds(170, 334, 110, 30);
         customexponentButton.setBounds(290, 334, 110, 30);
         logarithmButton.setBounds(410, 334, 110, 30);
-        
        
-
-         panel = new JPanel();
-         panel.setBounds (50, 395, 590, 550);
-         panel.setLayout (new GridLayout(4, 4, 10, 10));
-         //panel.setBackground(Color.GRAY);
+        panel = new JPanel();
+        panel.setBounds (50, 395, 590, 550);
+        panel.setLayout (new GridLayout(4, 4, 10, 10));
+        //panel.setBackground(Color.GRAY);
          
         panel.add(numberButtons[7]);
         panel.add(numberButtons[8]);
@@ -172,6 +212,7 @@ public class Calculator implements ActionListener
         panel.add(decimalButton);
         panel.add(percentageButton);
         panel.add(equalButton);
+        panel.setBackground(Color.decode("#1c1c1c"));
          
         frame.add(panel);
         frame.add(delButton);
@@ -199,9 +240,13 @@ public class Calculator implements ActionListener
         frame.add(factorialButton);
         frame.add(customexponentButton);
         frame.add(logarithmButton);
+        frame.setBackground(Color.decode("#1c1c1c"));
         frame.setVisible(true);
 
     }
+    
+
+      
     public static void main(String[]args) 
     {
         Calculator calc = new Calculator();
@@ -226,7 +271,7 @@ public class Calculator implements ActionListener
         operator = '-';
     }
     if (e.getSource() == multiButton) { //Multiplication Button
-        textfield.setText(textfield.getText().concat(" * "));
+        textfield.setText(textfield.getText().concat(" × "));
         operator = '*';
     }
     if (e.getSource() == divButton) { //Division Button
@@ -279,6 +324,11 @@ public class Calculator implements ActionListener
             textfield.setText(String.valueOf(roundOff));
         }
     
+    if (e.getSource() == percentageButton) { // Modulus Button
+         textfield.setText(textfield.getText().concat(" % "));
+         operator = '%';
+    }
+ 
     if (e.getSource() == positivenegativeButton) { //Positive Negative Button
         double temp = Double.parseDouble(textfield.getText());
         temp *= -1;
@@ -297,14 +347,14 @@ public class Calculator implements ActionListener
             return num1 + num2;
         case '-':
             return num1 - num2;
-        case '*':
+        case '×':
             return num1 * num2;
         case '÷':
             return num1 / num2;
+       case '%':
+            return num1 % num2; 
         default:
             return 0;
-    }
-    
-     
-}
+        }
+    } 
 }
