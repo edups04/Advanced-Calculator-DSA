@@ -1,18 +1,20 @@
 import javax.swing.*;
 import java.awt.*;
 
+
 class Design extends JButton {
     private int radius;
+
 
     public Design (String label, int radius) {
         super(label);
         this.radius = radius;
-        setFont(new Font("SansSerif", Font.PLAIN, 30)); 
+        setFont(new Font("Tahoma", Font.PLAIN, 30)); 
         setFocusPainted(false); 
         setContentAreaFilled(false); 
         setOpaque(false); 
     }
-
+    
     @Override
     protected void paintComponent(Graphics g) {
        
