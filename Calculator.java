@@ -1,7 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*; 
-
+import java.io.File;
+import java.io.IOException;
 
 public class Calculator implements ActionListener
 {                                                                       
@@ -19,13 +20,25 @@ public class Calculator implements ActionListener
     JPanel panel;
 
     
-    Font largeFont = new Font("SansSerif", Font.BOLD, 40);
-    Font myFont = new Font("SansSerif", Font.BOLD, 20);
+    Font largeFont = new Font("Tahoma", Font.BOLD, 40);
+    Font myFont = new Font("Tahoma", Font.BOLD, 20);
     double num1=0, num2=0, result=0;
     char operator;
+    Font Helvetica;
   
     Calculator() 
     {
+        
+        try {
+        
+            Helvetica = Font.createFont(Font.TRUETYPE_FONT, new File ("Helvetica-Bold.ttf")).deriveFont(30f);
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(Helvetica); 
+        } catch (IOException | FontFormatException e) {
+            e.printStackTrace();
+            Helvetica = new Font("Tahoma", Font.PLAIN, 30); // Fallback font
+        }
+        
         frame = new JFrame("Advanced Calculator");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(720, 999);
@@ -51,30 +64,30 @@ public class Calculator implements ActionListener
         closeparenthesisButton = new Design(")", 30);
         percentageButton = new Design("%", 30);
         positivenegativeButton = new Design("±", 30);
-        shiftButton = new Design ("SHIFT", 20);
-        minmaxButton = new Design("MinMax", 20);
-        absoluteButton = new Design("ABS", 20);
-        roundButton = new Design("ROUND", 20);
-        delButton = new Design("DEL", 20);
-        clearButton = new Design("AC/ON", 20);
-        yButton = new Design("y", 20);
-        xButton = new Design("x", 20);
-        summationButton = new Design("∑", 20);
-        capitalpiButton = new Design("Π", 20);
-        integralButton = new Design("∫", 20);
-        modulusButton = new Design("|x|", 20);
-        ceilButton = new Design("⌈ x ⌉", 20);
-        floorButton = new Design("⌊ x ⌋", 20);
-        lowercasepiButton = new Design("π", 20);
-        sinButton = new Design("sin", 20);
-        cosButton = new Design("cos", 20);
-        tanButton = new Design("tan", 20);
-        squarerootButton = new Design("√", 20);
-        permutationButton = new Design("nPr", 20);
-        combinationButton = new Design("nCr", 20);
-        factorialButton = new Design("!", 20);
-        customexponentButton = new Design("xʸ", 20);
-        logarithmButton = new Design("logₙy", 20);
+        shiftButton = new Design ("SHIFT", 15);
+        minmaxButton = new Design("MinMax", 15);
+        absoluteButton = new Design("ABS", 15);
+        roundButton = new Design("ROUND", 15);
+        delButton = new Design("DEL", 15);
+        clearButton = new Design("AC/ON", 15);
+        yButton = new Design("y", 15);
+        xButton = new Design("x", 15);
+        summationButton = new Design("∑", 15);
+        capitalpiButton = new Design("Π", 15);
+        integralButton = new Design("∫", 15);
+        modulusButton = new Design("|x|", 15);
+        ceilButton = new Design("⌈ x ⌉", 15);
+        floorButton = new Design("⌊ x ⌋", 15);
+        lowercasepiButton = new Design("π", 15);
+        sinButton = new Design("sin", 15);
+        cosButton = new Design("cos", 15);
+        tanButton = new Design("tan", 15);
+        squarerootButton = new Design("√", 15);
+        permutationButton = new Design("nPr", 15);
+        combinationButton = new Design("nCr", 15);
+        factorialButton = new Design("!", 15);
+        customexponentButton = new Design("xʸ", 15);
+        logarithmButton = new Design("logₙy", 15);
         
         addButton.setBackground(Color.decode("#ff9500"));
         subButton.setBackground(Color.decode("#ff9500"));
@@ -86,12 +99,12 @@ public class Calculator implements ActionListener
         positivenegativeButton.setBackground(Color.decode("#ff9500"));
         closeparenthesisButton.setBackground(Color.decode("#ff9500"));
         openparenthesisButton.setBackground(Color.decode("#ff9500"));
-        shiftButton.setBackground(Color.decode("#505050"));
+        shiftButton.setBackground(Color.decode("#ff9500"));
         minmaxButton.setBackground(Color.decode("#505050"));
         absoluteButton.setBackground(Color.decode("#505050"));
         roundButton.setBackground(Color.decode("#505050"));
-        delButton.setBackground(Color.decode("#505050"));
-        clearButton.setBackground(Color.decode("#505050"));
+        delButton.setBackground(Color.decode("#ff9500"));
+        clearButton.setBackground(Color.decode("#ff9500"));
         yButton.setBackground(Color.decode("#505050"));
         xButton.setBackground(Color.decode("#505050"));
         summationButton.setBackground(Color.decode("#505050"));
@@ -146,7 +159,10 @@ public class Calculator implements ActionListener
         functionButtons[31] = factorialButton;
         functionButtons[32] = customexponentButton;
         functionButtons[33] = logarithmButton;
-                
+        
+        
+        
+        
     for(int i=0; i<34; i++){
         functionButtons[i].addActionListener(this);
         functionButtons[i].setFont(myFont); 
@@ -355,6 +371,12 @@ public class Calculator implements ActionListener
             return num1 % num2; 
         default:
             return 0;
-        }
-    } 
+    }
+} 
+
+
+     
+
+    
 }
+
