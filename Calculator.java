@@ -16,9 +16,10 @@ public class Calculator implements ActionListener
     JButton ceilButton, floorButton, lowercasepiButton, sinButton, cosButton, tanButton;
     JButton squarerootButton, permutationButton, combinationButton, factorialButton, customexponentButton, logarithmButton;
     JPanel panel;
+
     
-    Font largeFont = new Font("Ink Free", Font.BOLD, 40);
-    Font myFont = new Font("Ink Free", Font.BOLD, 20);
+    Font largeFont = new Font("Monospaced", Font.BOLD, 40);
+    Font myFont = new Font("Monospaced", Font.BOLD, 20);
     double num1=0, num2=0, result=0;
     char operator;
 
@@ -144,6 +145,7 @@ public class Calculator implements ActionListener
         customexponentButton.setBounds(290, 334, 110, 30);
         logarithmButton.setBounds(410, 334, 110, 30);
         
+       
 
          panel = new JPanel();
          panel.setBounds (50, 395, 590, 550);
@@ -171,7 +173,6 @@ public class Calculator implements ActionListener
         panel.add(percentageButton);
         panel.add(equalButton);
          
-        
         frame.add(panel);
         frame.add(delButton);
         frame.add(clearButton);
@@ -209,37 +210,33 @@ public class Calculator implements ActionListener
     public void actionPerformed(ActionEvent e) {
     for (int i = 0; i < 10; i++) {
         if (e.getSource() == numberButtons[i]) {
-            // Concatenate the number in the textfield
             textfield.setText(textfield.getText().concat(String.valueOf(i)));
         }
     }
 
-    if (e.getSource() == decimalButton) {
-        // Concatenate decimal point
+    if (e.getSource() == decimalButton) { //Decimal Button
         textfield.setText(textfield.getText().concat("."));
     }
-    if (e.getSource() == addButton) {
+    if (e.getSource() == addButton) { //Addition Button
         textfield.setText(textfield.getText().concat(" + "));
         operator = '+';
     }
-    if (e.getSource() == subButton) {
+    if (e.getSource() == subButton) { //Substraction Button
         textfield.setText(textfield.getText().concat(" - "));
         operator = '-';
     }
-    if (e.getSource() == multiButton) {
+    if (e.getSource() == multiButton) { //Multiplication Button
         textfield.setText(textfield.getText().concat(" * "));
         operator = '*';
     }
-    if (e.getSource() == divButton) {
+    if (e.getSource() == divButton) { //Division Button
         textfield.setText(textfield.getText().concat(" ÷ "));
         operator = '÷';
     }
 
-    // Evaluate expression when equal button is pressed
-    if (e.getSource() == equalButton) {
+    if (e.getSource() == equalButton) { //Equal Button
         String expression = textfield.getText();
         try {
-            // Split the expression and perform calculation
             result = evaluateExpression(expression);
             textfield.setText(String.valueOf(result));
         } catch (Exception ex) {
@@ -247,25 +244,49 @@ public class Calculator implements ActionListener
         }
     }
 
-    if (e.getSource() == clearButton) {
+    if (e.getSource() == clearButton) { //Clear Button
         textfield.setText("");
     }
-    if (e.getSource() == delButton) {
+    if (e.getSource() == delButton) { //Delete Button
         String string = textfield.getText();
         textfield.setText("");
         for (int i = 0; i < string.length() - 1; i++) {
             textfield.setText(textfield.getText() + string.charAt(i));
         }
     }
-    if (e.getSource() == positivenegativeButton) {
+    
+    if (e.getSource() == absoluteButton) { //Abosulute Button
+            double absolute = Double.parseDouble(textfield.getText());
+            absolute = Math.abs(absolute);
+            textfield.setText(String.valueOf(absolute));
+        }
+    
+    if (e.getSource() == floorButton) { //Floor Button
+            double floor = Double.parseDouble(textfield.getText());
+            floor = Math.floor(floor);
+            textfield.setText(String.valueOf(floor));
+        }
+    
+     if (e.getSource() == ceilButton) { //Ceiling Button
+            double ceil = Double.parseDouble(textfield.getText());
+            ceil = Math.ceil(ceil);
+            textfield.setText(String.valueOf(ceil));
+        }
+     
+    if (e.getSource() == roundButton) { //Round off Button
+            double roundOff = Double.parseDouble(textfield.getText());
+            roundOff = Math.round(roundOff);
+            textfield.setText(String.valueOf(roundOff));
+        }
+    
+    if (e.getSource() == positivenegativeButton) { //Positive Negative Button
         double temp = Double.parseDouble(textfield.getText());
         temp *= -1;
         textfield.setText(String.valueOf(temp));
     }
 }
-// Function to evaluate the expression (this is a basic example)
+    
     public double evaluateExpression(String expression) {
-    // You can implement a more sophisticated expression parser
     String[] tokens = expression.split(" ");
     double num1 = Double.parseDouble(tokens[0]);
     char operator = tokens[1].charAt(0);
@@ -283,6 +304,7 @@ public class Calculator implements ActionListener
         default:
             return 0;
     }
+    
+     
 }
 }
-
