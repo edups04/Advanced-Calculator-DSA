@@ -1,8 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*; 
-import java.io.File;
-import java.io.IOException;
 
 public class Calculator implements ActionListener
 {                                                                       
@@ -20,24 +18,13 @@ public class Calculator implements ActionListener
     JPanel panel;
 
     
-    Font largeFont = new Font("Tahoma", Font.BOLD, 40);
-    Font myFont = new Font("Tahoma", Font.BOLD, 20);
+    Font largeFont = new Font("SansSerif", Font.PLAIN, 40);
+    Font myFont = new Font("SansSerif", Font.PLAIN, 20);
     double num1=0, num2=0, result=0;
     char operator;
-    Font Helvetica;
   
     Calculator() 
     {
-        
-        try {
-        
-            Helvetica = Font.createFont(Font.TRUETYPE_FONT, new File ("Helvetica-Bold.ttf")).deriveFont(30f);
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(Helvetica); 
-        } catch (IOException | FontFormatException e) {
-            e.printStackTrace();
-            Helvetica = new Font("Tahoma", Font.PLAIN, 30); // Fallback font
-        }
         
         frame = new JFrame("Advanced Calculator");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -53,7 +40,7 @@ public class Calculator implements ActionListener
         textfield.setBackground(Color.decode("#1c1c1c"));
         textfield.setForeground(Color.WHITE);
         textfield.setBorder(BorderFactory.createEmptyBorder());
-        
+                            
         addButton = new Design("+", 30);
         subButton = new Design("-", 30);
         multiButton = new Design("×", 30);
@@ -124,7 +111,6 @@ public class Calculator implements ActionListener
         customexponentButton.setBackground(Color.decode("#505050"));
         logarithmButton.setBackground(Color.decode("#505050"));
         
-        
         functionButtons[0] = addButton;
         functionButtons[1] = subButton;
         functionButtons[2] = multiButton;
@@ -161,19 +147,28 @@ public class Calculator implements ActionListener
         functionButtons[33] = logarithmButton;
         
         
-        
-        
     for(int i=0; i<34; i++){
         functionButtons[i].addActionListener(this);
-        functionButtons[i].setFont(myFont); 
         functionButtons[i].setForeground(Color.WHITE);
+        functionButtons[i].setFont(myFont);
         functionButtons[i].setFocusable(false);
     }
-
+            
+        openparenthesisButton.setFont(new Font("SansSerif", Font.PLAIN, 35));
+        closeparenthesisButton.setFont(new Font("SansSerif", Font.PLAIN, 35));
+        multiButton.setFont(new Font("SansSerif", Font.PLAIN, 35));
+        subButton.setFont(new Font("SansSerif", Font.PLAIN, 35));
+        divButton.setFont(new Font("SansSerif", Font.PLAIN, 35));
+        addButton.setFont(new Font("SansSerif", Font.PLAIN, 35));
+        equalButton.setFont(new Font("SansSerif", Font.PLAIN, 35));
+        positivenegativeButton.setFont(new Font("SansSerif", Font.PLAIN, 35));
+        percentageButton.setFont(new Font("SansSerif", Font.PLAIN, 35));
+        decimalButton.setFont(new Font("SansSerif", Font.PLAIN, 35));
+        
     for(int i=0; i<10; i++){
         numberButtons[i] = new Design(String.valueOf(i), 30);
         numberButtons[i].addActionListener(this);
-        numberButtons[i].setFont(myFont);
+        numberButtons[i].setFont(largeFont);
         numberButtons[i].setBackground(Color.decode("#d4d4d2"));
         numberButtons[i].setFocusable(false);
     }
@@ -257,16 +252,14 @@ public class Calculator implements ActionListener
         frame.add(customexponentButton);
         frame.add(logarithmButton);
         frame.setBackground(Color.decode("#1c1c1c"));
-        frame.setVisible(true);
-
+        frame.setVisible(true);    
     }
-    
-
-      
+ 
     public static void main(String[]args) 
     {
         Calculator calc = new Calculator();
     }
+    
     @Override
     public void actionPerformed(ActionEvent e) {
     for (int i = 0; i < 10; i++) {
@@ -278,23 +271,27 @@ public class Calculator implements ActionListener
     if (e.getSource() == decimalButton) { //Decimal Button
         textfield.setText(textfield.getText().concat("."));
     }
+    
     if (e.getSource() == addButton) { //Addition Button
         textfield.setText(textfield.getText().concat(" + "));
         operator = '+';
     }
+    
     if (e.getSource() == subButton) { //Substraction Button
         textfield.setText(textfield.getText().concat(" - "));
         operator = '-';
     }
+    
     if (e.getSource() == multiButton) { //Multiplication Button
         textfield.setText(textfield.getText().concat(" × "));
         operator = '*';
     }
+    
     if (e.getSource() == divButton) { //Division Button
         textfield.setText(textfield.getText().concat(" ÷ "));
         operator = '÷';
     }
-
+    
     if (e.getSource() == equalButton) { //Equal Button
         String expression = textfield.getText();
         try {
@@ -304,7 +301,7 @@ public class Calculator implements ActionListener
             textfield.setText("Error");
         }
     }
-
+    
     if (e.getSource() == clearButton) { //Clear Button
         textfield.setText("");
     }
@@ -350,18 +347,19 @@ public class Calculator implements ActionListener
         temp *= -1;
         textfield.setText(String.valueOf(temp));
     }
+    
     if (e.getSource() == minmaxButton) {
         new MinMaxIO();
     }
 }
     
     public double evaluateExpression(String expression) {
-    String[] tokens = expression.split(" ");
-    double num1 = Double.parseDouble(tokens[0]);
-    char operator = tokens[1].charAt(0);
-    double num2 = Double.parseDouble(tokens[2]);
+         String[] tokens = expression.split(" ");
+         double num1 = Double.parseDouble(tokens[0]);
+         char operator = tokens[1].charAt(0);
+         double num2 = Double.parseDouble(tokens[2]);
 
-    switch (operator) {
+      switch (operator) {
         case '+':
             return num1 + num2;
         case '-':
@@ -374,11 +372,7 @@ public class Calculator implements ActionListener
             return num1 % num2; 
         default:
             return 0;
-    }
-} 
-
-
-     
-
-    
+        }
+    }   
 }
+
