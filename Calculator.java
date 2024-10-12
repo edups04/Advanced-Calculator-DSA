@@ -1,10 +1,15 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*; 
+import java.util.Stack;
+
 
 public class Calculator implements ActionListener
-{                                                                       
-
+{                                           
+    double base = 0; 
+    double exponent = 0; 
+    boolean isExponentMode = false;
+    
     JFrame frame;
     JTextField textfield;
     JButton[] numberButtons = new JButton[10]; // Number Buttons
@@ -22,6 +27,7 @@ public class Calculator implements ActionListener
     Font myFont = new Font("SansSerif", Font.PLAIN, 20);
     double num1=0, num2=0, result=0;
     char operator;
+    boolean squareRootFlag = false;
   
     Calculator() 
     {
@@ -63,8 +69,8 @@ public class Calculator implements ActionListener
         capitalpiButton = new Design("Π", 15);
         integralButton = new Design("∫", 15);
         modulusButton = new Design("|x|", 15);
-        ceilButton = new Design("⌈ x ⌉", 15);
-        floorButton = new Design("⌊ x ⌋", 15);
+        ceilButton = new Design("⌈CEIL⌉", 15);
+        floorButton = new Design("⌊ FLR ⌋", 15);
         lowercasepiButton = new Design("π", 15);
         sinButton = new Design("sin", 15);
         cosButton = new Design("cos", 15);
@@ -289,22 +295,36 @@ public class Calculator implements ActionListener
     
     if (e.getSource() == divButton) { //Division Button
         textfield.setText(textfield.getText().concat(" ÷ "));
-        operator = '÷';
+        operator = '/';
     }
     
     if (e.getSource() == equalButton) { //Equal Button
         String expression = textfield.getText();
-        try {
-            result = evaluateExpression(expression);
-            textfield.setText(String.valueOf(result));
-        } catch (Exception ex) {
-            textfield.setText("Error");
+        
+        if (expression.startsWith("√")) { 
+            num1 = Double.parseDouble(expression.substring(1));
+            result = Math.sqrt(num1);
+            textfield.setText(String.valueOf(result)); 
+        } else if (isExponentMode) {
+            // Handle exponent mode
+            double exponent = Double.parseDouble(textfield.getText());
+            result = Math.pow(base, exponent);
+            textfield.setText(base + " ^ " + exponent + " = " + result); 
+            isExponentMode = false; 
+        } else {
+            try {
+                result = evaluateExpression(expression);
+                textfield.setText(String.valueOf(result)); 
+            } catch (Exception ex) {
+                textfield.setText("Error");
+            }
         }
     }
     
     if (e.getSource() == clearButton) { //Clear Button
         textfield.setText("");
     }
+    
     if (e.getSource() == delButton) { //Delete Button
         String string = textfield.getText();
         textfield.setText("");
@@ -347,32 +367,119 @@ public class Calculator implements ActionListener
         temp *= -1;
         textfield.setText(String.valueOf(temp));
     }
-    
-    if (e.getSource() == minmaxButton) {
+        
+    if (e.getSource() == minmaxButton) { //Min Max Button
         new MinMaxIO();
     }
+    
+    if (e.getSource() == factorialButton) { //Factorial Button
+            String input = textfield.getText();
+            try {
+                double num = Double.parseDouble(input);
+                result = factorial(num);
+                textfield.setText(String.valueOf(result));
+            } catch (NumberFormatException ex) {
+                textfield.setText("Invalid input");
+    }
+  }
+    
+    if (e.getSource() == sinButton) { // Sine Button
+        double angle = Double.parseDouble(textfield.getText());
+        double result = Math.sin(Math.toRadians(angle)); 
+        textfield.setText(String.valueOf(result));
+    }
+
+    if (e.getSource() == cosButton) { // Cosine Button
+        double angle = Double.parseDouble(textfield.getText());
+        double result = Math.cos(Math.toRadians(angle)); 
+        textfield.setText(String.valueOf(result));
+    }
+
+    if (e.getSource() == tanButton) { // Tangent Button
+        double angle = Double.parseDouble(textfield.getText());
+        double result = Math.tan(Math.toRadians(angle)); 
+        textfield.setText(String.valueOf(result));
+    }
+    
+    if (e.getSource() == squarerootButton) { //Square Root Button
+            textfield.setText(textfield.getText().concat("√"));
+    }
+    
+    if (e.getSource() == customexponentButton) { //Custom Exponent Button
+            isExponentMode = true; 
+            base = Double.parseDouble(textfield.getText()); 
+            textfield.setText(""); 
+        }
+
 }
     
     public double evaluateExpression(String expression) {
-         String[] tokens = expression.split(" ");
-         double num1 = Double.parseDouble(tokens[0]);
-         char operator = tokens[1].charAt(0);
-         double num2 = Double.parseDouble(tokens[2]);
+          String[] tokens = expression.split(" ");
+          Stack<Double> values = new Stack<>();
+          Stack<Character> operators = new Stack<>();
 
+    for (String token : tokens) {
+        if (token.matches("\\d+(\\.\\d+)?")) {
+            values.push(Double.parseDouble(token));
+        } 
+        else if (token.length() == 1 && "+-×÷%".contains(token)) {
+            while (!operators.isEmpty() && precedence(operators.peek()) >= precedence(token.charAt(0))) {
+                values.push(applyOperator(operators.pop(), values.pop(), values.pop()));
+            }
+            operators.push(token.charAt(0));
+        }
+    }
+    
+    while (!operators.isEmpty()) {
+        values.push(applyOperator(operators.pop(), values.pop(), values.pop()));
+    }
+    return values.pop();
+}
+
+    private int precedence(char operator) {
       switch (operator) {
         case '+':
-            return num1 + num2;
         case '-':
-            return num1 - num2;
+            return 1;
         case '×':
-            return num1 * num2;
         case '÷':
-            return num1 / num2;
-       case '%':
-            return num1 % num2; 
+        case '%':
+            return 2;
+        default:
+            return 0;
+    }
+}
+    
+    private double applyOperator(char operator, double b, double a) {
+      switch (operator) {
+        case '+':
+            return a + b;
+        case '-':
+            return a - b;
+        case '×':
+            return a * b;
+        case '÷':
+            if (b == 0) {
+                throw new UnsupportedOperationException("Cannot divide by zero");
+            }
+            return a / b;
+        case '%':
+            return a % b;
         default:
             return 0;
         }
-    }   
+    }
+    
+    private static double factorial(double num) {
+        if (num < 0) {
+            return 0; 
+        }
+        double result = 1;
+        for (int i = 2; i <= num; i++) {
+            result *= i;
+        }
+        return result;
+    }
+
 }
 
