@@ -350,6 +350,9 @@ public class Calculator implements ActionListener
         temp *= -1;
         textfield.setText(String.valueOf(temp));
     }
+    if (e.getSource() == minmaxButton) {
+        new MinMaxIO();
+    }
 }
     
     public double evaluateExpression(String expression) {
@@ -379,4 +382,3 @@ public class Calculator implements ActionListener
 
     
 }
-
