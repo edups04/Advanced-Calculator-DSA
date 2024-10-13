@@ -1,83 +1,83 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 
 public class MinMaxIO extends JFrame {
-    //Add ng textfield at label
-    private JTextField input1;
-    private JTextField input2;
+    private JTextField inputField;
     private JLabel output;
 
     public MinMaxIO() {
-        setTitle("MinMax Calculator");//pangalan ng JFrame
-        setSize(300, 200);//Size ng JFrame
+        setTitle("MinMax Calculator");
+        setSize(350, 200);
         setLayout(null);
-        setLocationRelativeTo(null);//Para mapunta sa center ang JFrame
-        
-        //Label para sa first number along with its properties.
-        JLabel firstLabel = new JLabel("First Number:");
-        firstLabel.setBounds(10, 10, 100, 25);
-        add(firstLabel);
-        
-        //Textfield para sa min na i-input ng user
-        input1 = new JTextField(); 
-        input1.setBounds(120, 10, 150, 25);
-        add(input1);
-        
-        //Label para sa first number along with its properties.
-        JLabel secondLabel = new JLabel("Second Number:");
-        secondLabel.setBounds(10, 40, 100, 25);
-        add(secondLabel);
-        
-        //Textfield para sa max na i-input ng user
-        input2 = new JTextField();
-        input2.setBounds(120, 40, 150, 25);
-        add(input2);
-        
-        //Label ng result. Dito lalabas yung output
+        setLocationRelativeTo(null);
+
+        // Label for the input field
+        JLabel inputLabel = new JLabel("Enter Numbers (comma separated):");
+        inputLabel.setBounds(10, 10, 250, 25);
+        add(inputLabel);
+
+        // TextField for user input
+        inputField = new JTextField();
+        inputField.setBounds(10, 40, 300, 25);
+        add(inputField);
+
+        // Label to display De result
         output = new JLabel("Result: ");
-        output.setBounds(10, 100, 250, 25);
+        output.setBounds(10, 130, 300, 25);
         add(output);
 
-        //Button para sa Min and its properties
+        // Button to find De Min
         JButton minButton = new JButton("Find Min");
-        minButton.setBounds(10, 70, 125, 25);
+        minButton.setBounds(10, 80, 150, 25);
         add(minButton);
 
-        //Button para sa Max and its properties
+        // Button to find De Max
         JButton maxButton = new JButton("Find Max");
-        maxButton.setBounds(145, 70, 125, 25);
+        maxButton.setBounds(170, 80, 150, 25);
         add(maxButton);
 
-        //Para sa first input ng user
+        // ActionListener for De Min button
         minButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    int num1 = Integer.parseInt(input1.getText());
-                    int num2 = Integer.parseInt(input2.getText());
-                    int min = Math.min(num1, num2);
-                    output.setText("Result: Min is " + min); //Ieedit yung text ng label ng result at i-add yung min
+                    int[] numbers = parseInputNumbers();
+                    int min = Arrays.stream(numbers).min().getAsInt();
+                    output.setText("Result: Min is " + min);
                 } catch (NumberFormatException ex) {
-                    output.setText("Please enter whole numbers for Min.");//Para pag nag-input ng decimal
+                    output.setText("Please enter valid whole numbers.");
+                } catch (Exception ex) {
+                    output.setText("An error occurred: " + ex.getMessage());
                 }
             }
         });
 
-        //Para sa second input ng user
+        // ActionListener for De Max button
         maxButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    int num1 = Integer.parseInt(input1.getText());
-                    int num2 = Integer.parseInt(input2.getText());
-                    int max = Math.max(num1, num2);
-                    output.setText("Result: Max is " + max); //Ieedit yung text ng label ng result at i-add yung max
+                    int[] numbers = parseInputNumbers();
+                    int max = Arrays.stream(numbers).max().getAsInt();
+                    output.setText("Result: Max is " + max);
                 } catch (NumberFormatException ex) {
-                    output.setText("Please enter whole numbers for Max.");//Para pag nag-input ng decimal
+                    output.setText("Please enter valid whole numbers.");
+                } catch (Exception ex) {
+                    output.setText("An error occurred: " + ex.getMessage());
                 }
             }
         });
 
-        setVisible(true);//para maging visilble yung JFrame ng MinMax
+        setVisible(true);
+    }
+
+    private int[] parseInputNumbers() throws NumberFormatException {
+        String input = inputField.getText();
+        String[] numberStrings = input.split(","); // Split input by commasss
+        return Arrays.stream(numberStrings)
+                     .map(String::trim)             
+                     .mapToInt(Integer::parseInt)   
+                     .toArray();
     }
 
     public static void main(String[] args) {
