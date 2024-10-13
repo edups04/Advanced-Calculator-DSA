@@ -2,7 +2,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+/*
+ * This section contains the Calculus functions for the calculator application.
+ * The only thing that this supports is the basic Power rule for both Differentiation
+ * and integration.
+ * Please do NOT expect something like a complex triple integral here
+ * OR chain rule and definite integrals. That's way out of my league, 
+ * we only have Calc 1 under our belt.
+ */
 public class PolynomialCalc extends JFrame 
 {
     private JTextField inputField;
@@ -10,18 +17,26 @@ public class PolynomialCalc extends JFrame
 
     public PolynomialCalc() 
     {
+        /*
+         * Window details. In this section, the specifications of the window is placed.
+         */
         setTitle("Differentiation and Integration");
         setSize(600, 100);
         setFont(new Font("Poppins", Font.PLAIN, 30));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
+        /*
+         * This contains the details and contents of the buttons.
+         * There are only two buttons here.
+         */
         inputField = new JTextField();
         JButton derivativeButton = new JButton("Find d/dx");
         JButton integralButton = new JButton("Find ∫");
         outputArea = new JTextArea();
         outputArea.setEditable(false);
 
+        // Panel arrangement. This section contains the arrangement of the entire window.
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(1, 2));
         panel.add(derivativeButton);
@@ -31,6 +46,10 @@ public class PolynomialCalc extends JFrame
         add(panel, BorderLayout.CENTER);
         add(new JScrollPane(outputArea), BorderLayout.SOUTH);
 
+        /*
+         * This is the differentiation section. We first capture the input, and then it will solve it later for ParseAndDerive.
+         * If it is an error then it will print sir loudel's email and then display a help message.
+         */
         derivativeButton.addActionListener(new ActionListener() 
         {
             public void actionPerformed(ActionEvent e) 
@@ -48,6 +67,11 @@ public class PolynomialCalc extends JFrame
             }
         });
 
+        /*
+         * This is the integration section. Similar to the differentiation sector, we first capture
+         * the output and then solve for parseandintegrate.
+         * Same thing happens for the error handling for chain rule because it is NOT supported yet.
+         */
         integralButton.addActionListener(new ActionListener() 
         {
             public void actionPerformed(ActionEvent e)
@@ -66,6 +90,11 @@ public class PolynomialCalc extends JFrame
         });
     }
 
+    /*
+     * This section contains the error messages stating that chain rule is NOT supported yet.
+     * It will be implemented in the future.
+     * We can probably ask Sir Loudel for a fix.
+     */
     private String parseAndDerive(String polynomial) 
     {
         if (polynomial.contains("(")) 
