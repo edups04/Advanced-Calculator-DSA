@@ -32,7 +32,7 @@ public class Calculator implements ActionListener
     Calculator() 
     {
         
-        frame = new JFrame("Advanced Calculator");
+        frame = new JFrame("Advanced/Scientific Calculator");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(720, 999);
         frame.getContentPane().setBackground(Color.decode("#1c1c1c"));
@@ -55,7 +55,7 @@ public class Calculator implements ActionListener
         equalButton = new Design("=", 30);
         openparenthesisButton = new Design("(", 30);
         closeparenthesisButton = new Design(")", 30);
-        percentageButton = new Design("%", 30);
+        percentageButton = new Design("%", 30); // modulus
         positivenegativeButton = new Design("±", 30);
         shiftButton = new Design ("SHIFT", 15);
         minmaxButton = new Design("MinMax", 15);
@@ -153,7 +153,8 @@ public class Calculator implements ActionListener
         functionButtons[33] = logarithmButton;
         
         
-    for(int i=0; i<34; i++){
+    for(int i=0; i<34; i++)
+    {
         functionButtons[i].addActionListener(this);
         functionButtons[i].setForeground(Color.WHITE);
         functionButtons[i].setFont(myFont);
@@ -171,7 +172,8 @@ public class Calculator implements ActionListener
         percentageButton.setFont(new Font("SansSerif", Font.PLAIN, 35));
         decimalButton.setFont(new Font("SansSerif", Font.PLAIN, 35));
         
-    for(int i=0; i<10; i++){
+    for(int i=0; i<10; i++)
+    {
         numberButtons[i] = new Design(String.valueOf(i), 30);
         numberButtons[i].addActionListener(this);
         numberButtons[i].setFont(largeFont);
@@ -267,215 +269,269 @@ public class Calculator implements ActionListener
     }
     
     @Override
-    public void actionPerformed(ActionEvent e) {
-    for (int i = 0; i < 10; i++) {
-        if (e.getSource() == numberButtons[i]) {
+    public void actionPerformed(ActionEvent e) 
+    {
+    for (int i = 0; i < 10; i++) 
+    {
+        if (e.getSource() == numberButtons[i]) 
+        {
             textfield.setText(textfield.getText().concat(String.valueOf(i)));
         }
     }
 
-    if (e.getSource() == decimalButton) { //Decimal Button
+    if (e.getSource() == decimalButton) 
+    { //Decimal Button
         textfield.setText(textfield.getText().concat("."));
     }
     
-    if (e.getSource() == addButton) { //Addition Button
+    if (e.getSource() == addButton) 
+    { //Addition Button
         textfield.setText(textfield.getText().concat(" + "));
         operator = '+';
     }
     
-    if (e.getSource() == subButton) { //Substraction Button
+    if (e.getSource() == subButton) 
+    { //Substraction Button
         textfield.setText(textfield.getText().concat(" - "));
         operator = '-';
     }
     
-    if (e.getSource() == multiButton) { //Multiplication Button
+    if (e.getSource() == multiButton) 
+    { //Multiplication Button
         textfield.setText(textfield.getText().concat(" × "));
         operator = '*';
     }
     
-    if (e.getSource() == divButton) { //Division Button
+    if (e.getSource() == divButton) 
+    { //Division Button
         textfield.setText(textfield.getText().concat(" ÷ "));
         operator = '/';
     }
     
-    if (e.getSource() == equalButton) { //Equal Button
+    if (e.getSource() == equalButton) 
+    { //Equal Button
         String expression = textfield.getText();
         
-        if (expression.startsWith("√")) { 
+        if (expression.startsWith("√")) 
+        { 
             num1 = Double.parseDouble(expression.substring(1));
             result = Math.sqrt(num1);
             textfield.setText(String.valueOf(result)); 
-        } else if (isExponentMode) {
+        } 
+        else if (isExponentMode) 
+        {
             // Handle exponent mode
             double exponent = Double.parseDouble(textfield.getText());
             result = Math.pow(base, exponent);
             textfield.setText(base + " ^ " + exponent + " = " + result); 
             isExponentMode = false; 
-        } else {
-            try {
+        } 
+        else 
+        {
+            try 
+            {
                 result = evaluateExpression(expression);
                 textfield.setText(String.valueOf(result)); 
-            } catch (Exception ex) {
+            } 
+            catch (Exception ex) 
+            {
                 textfield.setText("Error");
             }
         }
     }
     
-    if (e.getSource() == clearButton) { //Clear Button
+    if (e.getSource() == clearButton) 
+    { //Clear Button
         textfield.setText("");
     }
     
-    if (e.getSource() == delButton) { //Delete Button
+    if (e.getSource() == delButton) 
+    { //Delete Button
         String string = textfield.getText();
         textfield.setText("");
-        for (int i = 0; i < string.length() - 1; i++) {
+        for (int i = 0; i < string.length() - 1; i++) 
+        {
             textfield.setText(textfield.getText() + string.charAt(i));
         }
     }
     
-    if (e.getSource() == absoluteButton) { //Abosulute Button
-            double absolute = Double.parseDouble(textfield.getText());
-            absolute = Math.abs(absolute);
-            textfield.setText(String.valueOf(absolute));
-        }
+    if (e.getSource() == absoluteButton) 
+    { //Abosulute Button
+        double absolute = Double.parseDouble(textfield.getText());
+        absolute = Math.abs(absolute);
+        textfield.setText(String.valueOf(absolute));
+    }
     
-    if (e.getSource() == floorButton) { //Floor Button
-            double floor = Double.parseDouble(textfield.getText());
-            floor = Math.floor(floor);
-            textfield.setText(String.valueOf(floor));
-        }
+    if (e.getSource() == floorButton) 
+    { //Floor Button
+        double floor = Double.parseDouble(textfield.getText());
+        floor = Math.floor(floor);
+        textfield.setText(String.valueOf(floor));
+    }
     
-     if (e.getSource() == ceilButton) { //Ceiling Button
-            double ceil = Double.parseDouble(textfield.getText());
-            ceil = Math.ceil(ceil);
-            textfield.setText(String.valueOf(ceil));
-        }
+    if (e.getSource() == ceilButton) 
+    { //Ceiling Button
+        double ceil = Double.parseDouble(textfield.getText());
+        ceil = Math.ceil(ceil);
+        textfield.setText(String.valueOf(ceil));
+    }
      
-    if (e.getSource() == roundButton) { //Round off Button
-            double roundOff = Double.parseDouble(textfield.getText());
-            roundOff = Math.round(roundOff);
-            textfield.setText(String.valueOf(roundOff));
-        }
+    if (e.getSource() == roundButton) 
+    { //Round off Button
+        double roundOff = Double.parseDouble(textfield.getText());
+        roundOff = Math.round(roundOff);
+        textfield.setText(String.valueOf(roundOff));
+    }
     
-    if (e.getSource() == percentageButton) { // Modulus Button
-         textfield.setText(textfield.getText().concat(" % "));
-         operator = '%';
+    if (e.getSource() == percentageButton) 
+    { // Modulus Button
+        textfield.setText(textfield.getText().concat(" % "));
+        operator = '%';
     }
  
-    if (e.getSource() == positivenegativeButton) { //Positive Negative Button
+    if (e.getSource() == positivenegativeButton) 
+    { //Positive Negative Button
         double temp = Double.parseDouble(textfield.getText());
         temp *= -1;
         textfield.setText(String.valueOf(temp));
     }
         
-    if (e.getSource() == minmaxButton) { //Min Max Button
+    if (e.getSource() == minmaxButton) 
+    { //Min Max Button
         new MinMaxIO();
     }
-    
-    if (e.getSource() == factorialButton) { //Factorial Button
-            String input = textfield.getText();
-            try {
-                double num = Double.parseDouble(input);
-                result = factorial(num);
-                textfield.setText(String.valueOf(result));
-            } catch (NumberFormatException ex) {
-                textfield.setText("Invalid input");
+
+    if (e.getSource() == integralButton) 
+    { //Calculus Functions
+        new PolynomialCalc();
     }
-  }
     
-    if (e.getSource() == sinButton) { // Sine Button
+    if (e.getSource() == factorialButton) 
+    { //Factorial Button
+        String input = textfield.getText();
+        try 
+        {
+            double num = Double.parseDouble(input);
+            result = factorial(num);
+            textfield.setText(String.valueOf(result));
+        } 
+        catch (NumberFormatException ex) 
+        {
+            textfield.setText("Invalid input");
+        }
+    }
+    
+    if (e.getSource() == sinButton) 
+    { // Sine Button
         double angle = Double.parseDouble(textfield.getText());
         double result = Math.sin(Math.toRadians(angle)); 
         textfield.setText(String.valueOf(result));
     }
 
-    if (e.getSource() == cosButton) { // Cosine Button
+    if (e.getSource() == cosButton) 
+    { // Cosine Button
         double angle = Double.parseDouble(textfield.getText());
         double result = Math.cos(Math.toRadians(angle)); 
         textfield.setText(String.valueOf(result));
     }
 
-    if (e.getSource() == tanButton) { // Tangent Button
+    if (e.getSource() == tanButton) 
+    { // Tangent Button
         double angle = Double.parseDouble(textfield.getText());
         double result = Math.tan(Math.toRadians(angle)); 
         textfield.setText(String.valueOf(result));
     }
     
-    if (e.getSource() == squarerootButton) { //Square Root Button
-            textfield.setText(textfield.getText().concat("√"));
+    if (e.getSource() == squarerootButton) 
+    { //Square Root Button
+        textfield.setText(textfield.getText().concat("√"));
     }
     
-    if (e.getSource() == customexponentButton) { //Custom Exponent Button
-            isExponentMode = true; 
-            base = Double.parseDouble(textfield.getText()); 
-            textfield.setText(""); 
-        }
-
+    if (e.getSource() == customexponentButton) 
+    { //Custom Exponent Button
+        isExponentMode = true; 
+        base = Double.parseDouble(textfield.getText()); 
+        textfield.setText(""); 
+    }
 }
     
-    public double evaluateExpression(String expression) {
-          String[] tokens = expression.split(" ");
-          Stack<Double> values = new Stack<>();
-          Stack<Character> operators = new Stack<>();
+    public double evaluateExpression(String expression) 
+    {
+        String[] tokens = expression.split(" ");
+        Stack<Double> values = new Stack<>();
+        Stack<Character> operators = new Stack<>();
 
-    for (String token : tokens) {
-        if (token.matches("\\d+(\\.\\d+)?")) {
+    for (String token : tokens) 
+    {
+        if (token.matches("\\d+(\\.\\d+)?")) 
+        {
             values.push(Double.parseDouble(token));
         } 
-        else if (token.length() == 1 && "+-×÷%".contains(token)) {
-            while (!operators.isEmpty() && precedence(operators.peek()) >= precedence(token.charAt(0))) {
+        else if (token.length() == 1 && "+-×÷%".contains(token)) 
+        {
+            while (!operators.isEmpty() && precedence(operators.peek()) >= precedence(token.charAt(0))) 
+            {
                 values.push(applyOperator(operators.pop(), values.pop(), values.pop()));
             }
             operators.push(token.charAt(0));
         }
     }
     
-    while (!operators.isEmpty()) {
+    while (!operators.isEmpty()) 
+    {
         values.push(applyOperator(operators.pop(), values.pop(), values.pop()));
     }
     return values.pop();
 }
 
-    private int precedence(char operator) {
-      switch (operator) {
-        case '+':
-        case '-':
-            return 1;
-        case '×':
-        case '÷':
-        case '%':
-            return 2;
-        default:
-            return 0;
-    }
-}
-    
-    private double applyOperator(char operator, double b, double a) {
-      switch (operator) {
-        case '+':
-            return a + b;
-        case '-':
-            return a - b;
-        case '×':
-            return a * b;
-        case '÷':
-            if (b == 0) {
-                throw new UnsupportedOperationException("Cannot divide by zero");
-            }
-            return a / b;
-        case '%':
-            return a % b;
-        default:
-            return 0;
+    private int precedence(char operator) 
+    {
+        switch (operator) 
+        {
+            case '+':
+            case '-':
+                return 1;
+            case '×':
+            case '÷':
+            case '%':
+                return 2;
+            default:
+                return 0;
         }
     }
     
-    private static double factorial(double num) {
-        if (num < 0) {
+    private double applyOperator(char operator, double b, double a) 
+    {
+        switch (operator) 
+        {
+            case '+':
+                return a + b;
+            case '-':
+                return a - b;
+            case '×':
+                return a * b;
+            case '÷':
+                if (b == 0) 
+                {
+                    throw new UnsupportedOperationException("Cannot divide by zero");
+                }
+                return a / b;
+            case '%':
+                return a % b;
+            default:
+                return 0;
+        }
+    }
+        
+    private static double factorial(double num) 
+    {
+        if (num < 0) 
+        {
             return 0; 
         }
         double result = 1;
-        for (int i = 2; i <= num; i++) {
+        for (int i = 2; i <= num; i++) 
+        {
             result *= i;
         }
         return result;
