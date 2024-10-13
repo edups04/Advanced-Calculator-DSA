@@ -399,6 +399,11 @@ public class Calculator implements ActionListener
     { //Calculus Functions
         new PolynomialCalc().setVisible(true);
     }
+
+    if (e.getSource() == matrixButton)
+    { // Matrices
+        new MatrixCalc().setVisible(true);
+    }
     
     if (e.getSource() == factorialButton) 
     { //Factorial Button
@@ -447,7 +452,101 @@ public class Calculator implements ActionListener
         base = Double.parseDouble(textfield.getText()); 
         textfield.setText(""); 
     }
+
+    if (e.getSource() == logarithmButton) 
+    { // custom logarithm
+        try 
+        {
+            String baseInput = JOptionPane.showInputDialog(null, "Enter base n");
+
+            if (baseInput != null && !baseInput.isEmpty()) 
+            {
+                double base = Double.parseDouble(baseInput);
+                String expressionInput = JOptionPane.showInputDialog(null, "Enter y");
+                if (expressionInput != null && !expressionInput.isEmpty()) 
+                {
+                    String xValueInput = JOptionPane.showInputDialog(null, "Enter value of x (if polynomial, press enter if not)");
+
+                    double x = 0;
+                    boolean isPolynomial = false;
+
+                    if (xValueInput != null && !xValueInput.isEmpty()) 
+                    {
+                        x = Double.parseDouble(xValueInput);
+                        isPolynomial = true;
+                    }
+
+                    double value;
+                    if (isPolynomial) 
+                    {
+                        value = evaluatePolynomial(expressionInput, x);
+                    } 
+                    else 
+                    {
+                        value = Double.parseDouble(expressionInput);
+                    }
+
+                    if (value > 0) 
+                    {
+                        double logResult = Math.log(value) / Math.log(base);
+                        textfield.setText("logₙ" + base + "(" + expressionInput + ") = " + logResult);
+                    } 
+                    else 
+                    {
+                        textfield.setText("math.abs to be implemented soon");
+                    }
+                }
+                else 
+                {
+                    textfield.setText("Error, invalid expression");
+                }
+            } 
+            else 
+            {
+                textfield.setText("Error, invalid base");
+            }
+        } 
+        catch (NumberFormatException ex) 
+        {
+            textfield.setText("Error, invalid input");
+        }
+    }
+
 }
+
+    private double evaluatePolynomial(String expression, double x) 
+    {
+        expression = expression.replace(" ", "").replace("^", "**");
+        double result = 0;
+        String[] terms = expression.split("\\+|(?=-)");
+
+        for (String term : terms) 
+        {
+            double coefficient = 1;
+            double exponent = 0;
+
+            if (term.contains("x**")) 
+            {
+                String[] parts = term.split("x\\*\\*");
+                coefficient = parts[0].isEmpty() ? 1 : Double.parseDouble(parts[0]);
+                exponent = Double.parseDouble(parts[1]);
+            } 
+            else if (term.contains("x")) 
+            {
+                String[] parts = term.split("x");
+                coefficient = parts[0].isEmpty() ? 1 : Double.parseDouble(parts[0]);
+                exponent = 1;
+            } 
+            else 
+            {
+                coefficient = Double.parseDouble(term);
+                exponent = 0;
+            }
+            result += coefficient * Math.pow(x, exponent);
+        }
+        return result;
+    }
+
     
     public double evaluateExpression(String expression) 
     {
@@ -455,28 +554,28 @@ public class Calculator implements ActionListener
         Stack<Double> values = new Stack<>();
         Stack<Character> operators = new Stack<>();
 
-    for (String token : tokens) 
-    {
-        if (token.matches("\\d+(\\.\\d+)?")) 
+        for (String token : tokens) 
         {
-            values.push(Double.parseDouble(token));
-        } 
-        else if (token.length() == 1 && "+-×÷%".contains(token)) 
-        {
-            while (!operators.isEmpty() && precedence(operators.peek()) >= precedence(token.charAt(0))) 
+            if (token.matches("\\d+(\\.\\d+)?")) 
             {
-                values.push(applyOperator(operators.pop(), values.pop(), values.pop()));
+                values.push(Double.parseDouble(token));
+            } 
+            else if (token.length() == 1 && "+-×÷%".contains(token)) 
+            {
+                while (!operators.isEmpty() && precedence(operators.peek()) >= precedence(token.charAt(0))) 
+                {
+                    values.push(applyOperator(operators.pop(), values.pop(), values.pop()));
+                }
+                operators.push(token.charAt(0));
             }
-            operators.push(token.charAt(0));
         }
+        
+        while (!operators.isEmpty()) 
+        {
+            values.push(applyOperator(operators.pop(), values.pop(), values.pop()));
+        }
+        return values.pop();
     }
-    
-    while (!operators.isEmpty()) 
-    {
-        values.push(applyOperator(operators.pop(), values.pop(), values.pop()));
-    }
-    return values.pop();
-}
 
     private int precedence(char operator) 
     {
