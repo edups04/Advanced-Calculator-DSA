@@ -403,7 +403,7 @@ public class Calculator implements ActionListener
 
     if (e.getSource() == integralButton) 
     { //Calculus Functions
-        new PolynomialCalc();
+        new PolynomialCalc().setVisible(true);
     }
     
     if (e.getSource() == factorialButton) 
