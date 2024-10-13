@@ -113,6 +113,11 @@ public class PolynomialCalc extends JFrame
         return integral(polynomial);
     }
 
+    /*
+     * This section handles differentiation through the use of d/dx.
+     * We first capture  the input, remove spaces, and the  do the power thing.
+     * Afterwards, we convert the input to ints and then solve it.
+     */
     private int gcd(int a, int b) 
     {
         return b == 0 ? a : gcd(b, a % b);
@@ -164,7 +169,7 @@ public class PolynomialCalc extends JFrame
                 coefficient = Integer.parseInt(term);
             }
 
-            if (power == 0) continue; // Constant term derivative is 0
+            if (power == 0) continue; // Constant term derivative is 0 and will always be zero
 
             coefficient *= power;
             power -= 1;
@@ -202,13 +207,17 @@ public class PolynomialCalc extends JFrame
                     termBuilder.append("^").append(power);
                 }
             }
-
             result.append(termBuilder);
         }
-
         return result.length() == 0 ? "0" : result.toString();
     }
 
+    /*
+     * Enplaced here is the integration section of this code. The process
+     * works like Differentiation, only that this time, we are integrating. Furthermore,
+     * only Power rule is supported here, not Chain rule. Please
+     * be advised regarding this.
+     */
     public String integral(String polynomial) 
     {
         polynomial = polynomial.replace("-", "+-");
@@ -323,6 +332,7 @@ public class PolynomialCalc extends JFrame
         return finalResult;
     }
 
+    // Main class. We obviously call this one.
     public static void main(String[] args) 
     {
         SwingUtilities.invokeLater(() -> 
