@@ -13,16 +13,15 @@ public class Calculator implements ActionListener
     JFrame frame;
     JTextField textfield;
     JButton[] numberButtons = new JButton[10]; // Number Buttons
-    JButton[] functionButtons = new JButton[34]; // Function Buttons
+    JButton[] functionButtons = new JButton[33]; // Function Buttons
     JButton addButton, subButton, multiButton, divButton;
     JButton decimalButton, equalButton, openparenthesisButton, closeparenthesisButton, percentageButton, positivenegativeButton;
     JButton shiftButton, minmaxButton, absoluteButton, roundButton, delButton, clearButton;
-    JButton yButton, xButton, summationButton, capitalpiButton, integralButton, modulusButton;
+    JButton matrixButton, summationButton, capitalpiButton, integralButton, modulusButton;
     JButton ceilButton, floorButton, lowercasepiButton, sinButton, cosButton, tanButton;
     JButton squarerootButton, permutationButton, combinationButton, factorialButton, customexponentButton, logarithmButton;
     JPanel panel;
 
-    
     Font largeFont = new Font("SansSerif", Font.PLAIN, 40);
     Font myFont = new Font("SansSerif", Font.PLAIN, 20);
     double num1=0, num2=0, result=0;
@@ -40,7 +39,7 @@ public class Calculator implements ActionListener
         frame.setVisible(true);
         
         textfield = new JTextField();
-        textfield.setBounds(50, 30, 590, 89);
+        textfield.setBounds(50, 30, 590, 95);
         textfield.setFont(largeFont);
         textfield.setEditable(false);
         textfield.setBackground(Color.decode("#1c1c1c"));
@@ -63,8 +62,7 @@ public class Calculator implements ActionListener
         roundButton = new Design("ROUND", 15);
         delButton = new Design("DEL", 15);
         clearButton = new Design("AC/ON", 15);
-        yButton = new Design("y", 15);
-        xButton = new Design("x", 15);
+        matrixButton = new Design("[   ]", 15);
         summationButton = new Design("∑", 15);
         capitalpiButton = new Design("Π", 15);
         integralButton = new Design("∫", 15);
@@ -98,8 +96,7 @@ public class Calculator implements ActionListener
         roundButton.setBackground(Color.decode("#505050"));
         delButton.setBackground(Color.decode("#ff9500"));
         clearButton.setBackground(Color.decode("#ff9500"));
-        yButton.setBackground(Color.decode("#505050"));
-        xButton.setBackground(Color.decode("#505050"));
+        matrixButton.setBackground(Color.decode("#505050"));
         summationButton.setBackground(Color.decode("#505050"));
         capitalpiButton.setBackground(Color.decode("#505050"));
         integralButton.setBackground(Color.decode("#505050"));
@@ -133,27 +130,26 @@ public class Calculator implements ActionListener
         functionButtons[13] = roundButton;
         functionButtons[14] = delButton;
         functionButtons[15] = clearButton;
-        functionButtons[16] = yButton;
-        functionButtons[17] = xButton;
-        functionButtons[18] = summationButton;
-        functionButtons[19] = capitalpiButton;
-        functionButtons[20] = integralButton;
-        functionButtons[21] = modulusButton;
-        functionButtons[22] = ceilButton;
-        functionButtons[23] = floorButton;
-        functionButtons[24] = lowercasepiButton;
-        functionButtons[25] = sinButton;
-        functionButtons[26] = cosButton;
-        functionButtons[27] = tanButton;
-        functionButtons[28] = squarerootButton;
-        functionButtons[29] = permutationButton;
-        functionButtons[30] = combinationButton;
-        functionButtons[31] = factorialButton;
-        functionButtons[32] = customexponentButton;
-        functionButtons[33] = logarithmButton;
+        functionButtons[16] = matrixButton;
+        functionButtons[17] = summationButton;
+        functionButtons[18] = capitalpiButton;
+        functionButtons[19] = integralButton;
+        functionButtons[20] = modulusButton;
+        functionButtons[21] = ceilButton;
+        functionButtons[22] = floorButton;
+        functionButtons[23] = lowercasepiButton;
+        functionButtons[24] = sinButton;
+        functionButtons[25] = cosButton;
+        functionButtons[26] = tanButton;
+        functionButtons[27] = squarerootButton;
+        functionButtons[28] = permutationButton;
+        functionButtons[29] = combinationButton;
+        functionButtons[30] = factorialButton;
+        functionButtons[31] = customexponentButton;
+        functionButtons[32] = logarithmButton;
         
         
-    for(int i=0; i<34; i++)
+    for(int i=0; i<33; i++)
     {
         functionButtons[i].addActionListener(this);
         functionButtons[i].setForeground(Color.WHITE);
@@ -187,21 +183,20 @@ public class Calculator implements ActionListener
         minmaxButton.setBounds(170, 138, 110, 30);
         absoluteButton.setBounds(290, 138, 110, 30);
         roundButton.setBounds(50, 187, 110, 30);
-        yButton.setBounds(170, 187, 110, 30);
-        xButton.setBounds(290, 187, 110, 30);
-        summationButton.setBounds(410, 187, 110, 30);
-        capitalpiButton.setBounds(530, 187, 110, 30);
-        integralButton.setBounds(50, 236, 110, 30);
-        modulusButton.setBounds(170, 236, 110, 30);
-        ceilButton.setBounds(290, 236, 110, 30);
-        floorButton.setBounds(410, 236, 110, 30);
-        lowercasepiButton.setBounds(530, 236, 110,30);
-        sinButton.setBounds(50, 285, 110, 30);
-        cosButton.setBounds(170, 285, 110, 30);
-        tanButton.setBounds(290, 285, 110, 30);
-        squarerootButton.setBounds(410, 285, 110, 30);
-        permutationButton.setBounds(530, 285, 110, 30);
-        combinationButton.setBounds(50, 334, 110, 30);
+        matrixButton.setBounds(170, 187, 110, 30);
+        summationButton.setBounds(290, 187, 110, 30);
+        capitalpiButton.setBounds(410, 187, 110, 30);
+        integralButton.setBounds(530, 187, 110, 30);
+        modulusButton.setBounds(50, 236, 110, 30);
+        ceilButton.setBounds(170, 236, 110, 30);
+        floorButton.setBounds(290, 236, 110, 30);
+        lowercasepiButton.setBounds(410, 236, 110, 30);
+        sinButton.setBounds(530, 236, 110,30);
+        cosButton.setBounds(50, 285, 110, 30);
+        tanButton.setBounds(170, 285, 110, 30);
+        squarerootButton.setBounds(290, 285, 110, 30);
+        permutationButton.setBounds(410, 285, 110, 30);
+        combinationButton.setBounds(530, 285, 110, 30);
         factorialButton.setBounds(170, 334, 110, 30);
         customexponentButton.setBounds(290, 334, 110, 30);
         logarithmButton.setBounds(410, 334, 110, 30);
@@ -241,8 +236,7 @@ public class Calculator implements ActionListener
         frame.add(minmaxButton);
         frame.add(absoluteButton);
         frame.add(roundButton);
-        frame.add(yButton);
-        frame.add(xButton);
+        frame.add(matrixButton);
         frame.add(summationButton);
         frame.add(capitalpiButton);
         frame.add(integralButton);
@@ -538,4 +532,3 @@ public class Calculator implements ActionListener
     }
 
 }
-
