@@ -76,7 +76,7 @@ public class MatrixCalc extends JFrame implements ActionListener
         add(new JScrollPane(resultArea), BorderLayout.EAST);
 
         setSize(700, 500);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setVisible(true);
     }
 
