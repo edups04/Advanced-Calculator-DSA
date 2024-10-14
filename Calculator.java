@@ -488,7 +488,7 @@ public class Calculator implements ActionListener
         text = text.substring(0, text.length() - lastToken.length()) + temp; // Replace the last number
         textfield.setText(text);
     }
-        
+} 
     if (e.getSource() == minmaxButton) 
     { //Min Max Button
         new MinMaxIO();
@@ -621,7 +621,7 @@ public class Calculator implements ActionListener
         }
     }
 }
-    }
+
     private double evaluatePolynomial(String expression, double x) 
     {
         expression = expression.replace(" ", "").replace("^", "**");
