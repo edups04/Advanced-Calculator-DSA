@@ -277,6 +277,52 @@ public class Calculator implements ActionListener
     { //Decimal Button
         textfield.setText(textfield.getText().concat("."));
     }
+
+    if (e.getSource() == summationButton) 
+    { // summation
+        try 
+        {
+            String startInput = JOptionPane.showInputDialog(null, "Enter start value");
+            String endInput = JOptionPane.showInputDialog(null, "Enter end value");
+
+            if (startInput != null && !startInput.isEmpty() && endInput != null && !endInput.isEmpty()) 
+            {
+                int start = Integer.parseInt(startInput);
+                int end = Integer.parseInt(endInput);
+
+                if (start > end) 
+                {
+                    textfield.setText("Error - start value must be equal to the end value.");
+                    return;
+                }
+                String expressionInput = JOptionPane.showInputDialog(null, "Enter the expression (polynomial or any math expression):");
+
+                if (expressionInput != null && !expressionInput.isEmpty()) 
+                {
+                    double summationResult = 0;
+                    for (int x = start; x <= end; x++) 
+                    {
+                        double value = evaluatePolynomial(expressionInput, x);
+                        summationResult += value;
+                    }
+
+                    textfield.setText("Σ (" + expressionInput + ") from " + start + " to " + end + " = " + summationResult);
+                }
+                else 
+                {
+                    textfield.setText("Error - invalid expression!");
+                }
+            } 
+            else 
+            {
+                textfield.setText("Error - invalid range!");
+            }
+        } 
+        catch (NumberFormatException ex) 
+        {
+            textfield.setText("Error - invalid input!");
+        }
+    }
     
     if (e.getSource() == addButton) 
     { //Addition Button
@@ -346,6 +392,54 @@ public class Calculator implements ActionListener
         for (int i = 0; i < string.length() - 1; i++) 
         {
             textfield.setText(textfield.getText() + string.charAt(i));
+        }
+    }
+
+    if (e.getSource() == capitalpiButton) 
+    { // capital pi
+        try 
+        {
+            String startInput = JOptionPane.showInputDialog(null, "Enter start value");
+            String endInput = JOptionPane.showInputDialog(null, "Enter end value");
+
+            if (startInput != null && !startInput.isEmpty() && endInput != null && !endInput.isEmpty()) 
+            {
+                int start = Integer.parseInt(startInput);
+                int end = Integer.parseInt(endInput);
+
+                if (start > end) 
+                {
+                    textfield.setText("Error - Start num must be less than the end num.");
+                    return;
+                }
+
+                String expressionInput = JOptionPane.showInputDialog(null, "Enter the expression (polynomial or any math expression):");
+
+                if (expressionInput != null && !expressionInput.isEmpty()) 
+                {
+                    double productResult = 1;
+
+                    for (int x = start; x <= end; x++) 
+                    {
+                        double value = evaluatePolynomial(expressionInput, x);
+                        productResult *= value;
+                    }
+
+                    textfield.setText("Π (" + expressionInput + ") from " + start + " to " + end + " = " + productResult);
+                }
+                else 
+                {
+                    textfield.setText("Error - invalid expression!");
+                }
+            } 
+            else 
+            {
+                textfield.setText("Error - invalid range!");
+            }
+        } 
+        catch (NumberFormatException ex) 
+        {
+            textfield.setText("Error - invalid input!");
         }
     }
     
