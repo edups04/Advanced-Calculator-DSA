@@ -23,7 +23,7 @@ public class PolynomialCalc extends JFrame
         setTitle("Differentiation and Integration");
         setSize(600, 100);
         setFont(new Font("Poppins", Font.PLAIN, 30));
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
         /*
