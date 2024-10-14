@@ -13,7 +13,7 @@ public class Calculator implements ActionListener
     JFrame frame;
     JTextField textfield;
     JButton[] numberButtons = new JButton[10]; // Number Buttons
-    JButton[] functionButtons = new JButton[33]; // Function Buttons
+    JButton[] functionButtons = new JButton[32]; // Function Buttons
     JButton addButton, subButton, multiButton, divButton;
     JButton decimalButton, equalButton, openparenthesisButton, closeparenthesisButton, percentageButton, positivenegativeButton;
     JButton shiftButton, minmaxButton, absoluteButton, roundButton, delButton, clearButton;
@@ -53,7 +53,9 @@ public class Calculator implements ActionListener
         decimalButton = new Design(".", 30);
         equalButton = new Design("=", 30);
         openparenthesisButton = new Design("(", 30);
+        openparenthesisButton.addActionListener(this);
         closeparenthesisButton = new Design(")", 30);
+        closeparenthesisButton.addActionListener(this);
         percentageButton = new Design("%", 30); // modulus
         positivenegativeButton = new Design("±", 30);
         shiftButton = new Design ("SHIFT", 15);
@@ -134,7 +136,7 @@ public class Calculator implements ActionListener
         functionButtons[17] = summationButton;
         functionButtons[18] = capitalpiButton;
         functionButtons[19] = integralButton;
-        functionButtons[20] = modulusButton;
+        functionButtons[20] = factorialButton;
         functionButtons[21] = ceilButton;
         functionButtons[22] = floorButton;
         functionButtons[23] = lowercasepiButton;
@@ -144,12 +146,11 @@ public class Calculator implements ActionListener
         functionButtons[27] = squarerootButton;
         functionButtons[28] = permutationButton;
         functionButtons[29] = combinationButton;
-        functionButtons[30] = factorialButton;
-        functionButtons[31] = customexponentButton;
-        functionButtons[32] = logarithmButton;
+        functionButtons[30] = customexponentButton;
+        functionButtons[31] = logarithmButton;
         
         
-    for(int i=0; i<33; i++)
+    for(int i=0; i<32; i++)
     {
         functionButtons[i].addActionListener(this);
         functionButtons[i].setForeground(Color.WHITE);
@@ -187,7 +188,7 @@ public class Calculator implements ActionListener
         summationButton.setBounds(290, 187, 110, 30);
         capitalpiButton.setBounds(410, 187, 110, 30);
         integralButton.setBounds(530, 187, 110, 30);
-        modulusButton.setBounds(50, 236, 110, 30);
+        factorialButton.setBounds(50, 236, 110, 30);
         ceilButton.setBounds(170, 236, 110, 30);
         floorButton.setBounds(290, 236, 110, 30);
         lowercasepiButton.setBounds(410, 236, 110, 30);
@@ -197,10 +198,9 @@ public class Calculator implements ActionListener
         squarerootButton.setBounds(290, 285, 110, 30);
         permutationButton.setBounds(410, 285, 110, 30);
         combinationButton.setBounds(530, 285, 110, 30);
-        factorialButton.setBounds(170, 334, 110, 30);
-        customexponentButton.setBounds(290, 334, 110, 30);
-        logarithmButton.setBounds(410, 334, 110, 30);
-       
+        customexponentButton.setBounds(50, 334, 110, 30);
+        logarithmButton.setBounds(170, 334, 110, 30);
+      
         panel = new JPanel();
         panel.setBounds (50, 395, 590, 550);
         panel.setLayout (new GridLayout(4, 4, 10, 10));
@@ -240,7 +240,6 @@ public class Calculator implements ActionListener
         frame.add(summationButton);
         frame.add(capitalpiButton);
         frame.add(integralButton);
-        frame.add(modulusButton);
         frame.add(ceilButton);
         frame.add(floorButton);
         frame.add(lowercasepiButton);
@@ -359,8 +358,7 @@ public class Calculator implements ActionListener
             textfield.setText(String.valueOf(result)); 
         } 
         else if (isExponentMode) 
-        {
-            // Handle exponent mode
+        { // Handle exponent mode
             double exponent = Double.parseDouble(textfield.getText());
             result = Math.pow(base, exponent);
             textfield.setText(base + " ^ " + exponent + " = " + result); 
@@ -478,10 +476,17 @@ public class Calculator implements ActionListener
     }
  
     if (e.getSource() == positivenegativeButton) 
-    { //Positive Negative Button
-        double temp = Double.parseDouble(textfield.getText());
-        temp *= -1;
-        textfield.setText(String.valueOf(temp));
+    { // Positive Negative Button
+        String text = textfield.getText();
+ 
+        String[] tokens = text.split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)"); // Split by non-digit boundaries
+        String lastToken = tokens[tokens.length - 1]; // Get the last token
+
+    if (!lastToken.isEmpty() && lastToken.matches("-?\\d+(\\.\\d+)?")) {
+        double temp = Double.parseDouble(lastToken);
+        temp *= -1; 
+        text = text.substring(0, text.length() - lastToken.length()) + temp; // Replace the last number
+        textfield.setText(text);
     }
         
     if (e.getSource() == minmaxButton) 
@@ -547,6 +552,16 @@ public class Calculator implements ActionListener
         textfield.setText(""); 
     }
 
+    if (e.getSource() == openparenthesisButton) 
+    { // Open Parenthesis Button
+        textfield.setText(textfield.getText().concat("("));
+    }
+
+    if (e.getSource() == closeparenthesisButton) 
+    { // Close Parenthesis Button
+        textfield.setText(textfield.getText().concat(")"));
+    }
+    
     if (e.getSource() == logarithmButton) 
     { // custom logarithm
         try 
@@ -605,9 +620,8 @@ public class Calculator implements ActionListener
             textfield.setText("Error, invalid input");
         }
     }
-
 }
-
+    }
     private double evaluatePolynomial(String expression, double x) 
     {
         expression = expression.replace(" ", "").replace("^", "**");
@@ -642,33 +656,69 @@ public class Calculator implements ActionListener
     }
 
     
-    public double evaluateExpression(String expression) 
-    {
-        String[] tokens = expression.split(" ");
-        Stack<Double> values = new Stack<>();
-        Stack<Character> operators = new Stack<>();
+    public double evaluateExpression(String expression) {
+    expression = expression.replaceAll("\\s+", ""); 
+    Stack<Double> values = new Stack<>();
+    Stack<Character> operators = new Stack<>();
 
-        for (String token : tokens) 
-        {
-            if (token.matches("\\d+(\\.\\d+)?")) 
-            {
-                values.push(Double.parseDouble(token));
-            } 
-            else if (token.length() == 1 && "+-×÷%".contains(token)) 
-            {
-                while (!operators.isEmpty() && precedence(operators.peek()) >= precedence(token.charAt(0))) 
-                {
+    boolean expectNegativeNumber = true;
+
+    StringBuilder number = new StringBuilder();
+
+    for (int i = 0; i < expression.length(); i++) {
+        char currentChar = expression.charAt(i);
+
+        if (Character.isDigit(currentChar) || currentChar == '.') {
+            number.append(currentChar);
+            expectNegativeNumber = false; 
+        } else if (currentChar == '-' && expectNegativeNumber) {
+
+            number.append(currentChar);
+            expectNegativeNumber = false;
+        } else if (currentChar == '(') {
+
+            operators.push(currentChar);
+            expectNegativeNumber = true; 
+        } else if (currentChar == ')') {
+
+            while (!operators.isEmpty() && operators.peek() != '(') {
+                values.push(applyOperator(operators.pop(), values.pop(), values.pop()));
+            }
+            operators.pop(); 
+        } else {
+            
+            if (number.length() > 0) {
+                values.push(Double.parseDouble(number.toString()));
+                number.setLength(0); 
+            }
+
+            if (isOperator(currentChar)) {
+                while (!operators.isEmpty() && precedence(operators.peek()) >= precedence(currentChar)) {
                     values.push(applyOperator(operators.pop(), values.pop(), values.pop()));
                 }
-                operators.push(token.charAt(0));
+                operators.push(currentChar);
+                expectNegativeNumber = true; 
             }
         }
-        
-        while (!operators.isEmpty()) 
-        {
-            values.push(applyOperator(operators.pop(), values.pop(), values.pop()));
-        }
-        return values.pop();
+    }
+
+    
+    if (number.length() > 0) {
+        values.push(Double.parseDouble(number.toString()));
+    }
+
+
+    while (!operators.isEmpty()) {
+        values.push(applyOperator(operators.pop(), values.pop(), values.pop()));
+    }
+
+    return values.pop();
+}
+
+
+    private boolean isOperator(char c) 
+    {
+        return c == '+' || c == '-' || c == '×' || c == '÷' || c == '%';
     }
 
     private int precedence(char operator) 
@@ -686,7 +736,7 @@ public class Calculator implements ActionListener
                 return 0;
         }
     }
-    
+
     private double applyOperator(char operator, double b, double a) 
     {
         switch (operator) 
@@ -706,10 +756,11 @@ public class Calculator implements ActionListener
             case '%':
                 return a % b;
             default:
-                return 0;
+                throw new UnsupportedOperationException("Unsupported operator: " + operator);
         }
     }
-        
+
+    // Keeping factorial function as it is
     private static double factorial(double num) 
     {
         if (num < 0) 
@@ -723,5 +774,4 @@ public class Calculator implements ActionListener
         }
         return result;
     }
-
 }
