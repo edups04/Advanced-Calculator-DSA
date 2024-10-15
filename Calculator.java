@@ -202,7 +202,7 @@ public class Calculator implements ActionListener
         logarithmButton.setBounds(170, 334, 110, 30);
       
         panel = new JPanel();
-        panel.setBounds (50, 395, 590, 550);
+        panel.setBounds (50, 395, 500, 200);
         panel.setLayout (new GridLayout(4, 4, 10, 10));
         //panel.setBackground(Color.GRAY);
          
@@ -492,6 +492,15 @@ public class Calculator implements ActionListener
     if (e.getSource() == minmaxButton) 
     { //Min Max Button
         new MinMaxIO();
+    }
+
+    if (e.getSource() == permutationButton)
+    {//Permutation Button
+    new PermutationCalc(textfield);    
+    }
+
+    if(e.getSource() == combinationButton) {
+        new CombinationCalc(textfield);
     }
 
     if (e.getSource() == integralButton) 
