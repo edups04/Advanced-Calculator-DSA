@@ -4,39 +4,47 @@ import java.awt.event.*;
 
 public class PermutationCalc extends JFrame implements ActionListener {
     private JTextField entryField, limitField;
-    private JTextField calculatorDisplay;  // Reference to the calculator's display
+    private JTextField calculatorDisplay;
     private JButton calculateButton;
 
-    // Constructor updated to accept a JTextField (main calculator display)
     public PermutationCalc(JTextField calculatorDisplay) {
-        this.calculatorDisplay = calculatorDisplay; // Store the reference to the calculator's display
+        this.calculatorDisplay = calculatorDisplay;
         setTitle("Permutation Calculator");
-        setLayout(new BorderLayout());
 
-        JPanel inputPanel = new JPanel(new GridLayout(3, 2));
+        setLayout(new BorderLayout(10, 10));  
 
-        // Input for entry (total elements)
-        inputPanel.add(new JLabel("Enter total elements (n):"));
+        JPanel inputPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5); 
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        inputPanel.add(new JLabel("Enter total elements (n):"), gbc);
+
+        gbc.gridx = 1;
         entryField = new JTextField(10);
-        inputPanel.add(entryField);
+        inputPanel.add(entryField, gbc);
 
-        // Input for limit (selection size)
-        inputPanel.add(new JLabel("Enter selection size (r):"));
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        inputPanel.add(new JLabel("Enter selection size (r):"), gbc);
+
+        gbc.gridx = 1;
         limitField = new JTextField(10);
-        inputPanel.add(limitField);
-
-        // Button for calculating permutation
-        calculateButton = new JButton("Calculate Permutation");
-        calculateButton.addActionListener(this);
+        inputPanel.add(limitField, gbc);
 
         JPanel buttonPanel = new JPanel();
+        calculateButton = new JButton("Calculate Permutation");
+        calculateButton.addActionListener(this);
         buttonPanel.add(calculateButton);
 
-        add(inputPanel, BorderLayout.NORTH);
-        add(buttonPanel, BorderLayout.CENTER);
+        add(inputPanel, BorderLayout.CENTER);
+        add(buttonPanel, BorderLayout.SOUTH);
 
-        setSize(400, 200);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);  // So it closes without exiting the whole program
+        setSize(300, 150);
+        setLocationRelativeTo(null); 
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setVisible(true);
     }
 
@@ -46,7 +54,6 @@ public class PermutationCalc extends JFrame implements ActionListener {
             int n = Integer.parseInt(entryField.getText());
             int r = Integer.parseInt(limitField.getText());
 
-            // Set the result directly in the calculator's display
             calculatorDisplay.setText("Permutation: " + computePermutation(n, r));
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Invalid input! Please enter valid integers.", "Error", JOptionPane.ERROR_MESSAGE);
