@@ -13,7 +13,7 @@ public class Calculator implements ActionListener
     JFrame frame;
     JTextField textfield;
     JButton[] numberButtons = new JButton[10]; // Number Buttons
-    JButton[] functionButtons = new JButton[32]; // Function Buttons
+    JButton[] functionButtons = new JButton[31]; // Function Buttons
     JButton addButton, subButton, multiButton, divButton;
     JButton decimalButton, equalButton, openparenthesisButton, closeparenthesisButton, percentageButton, positivenegativeButton;
     JButton shiftButton, minmaxButton, absoluteButton, roundButton, delButton, clearButton;
@@ -53,9 +53,7 @@ public class Calculator implements ActionListener
         decimalButton = new Design(".", 30);
         equalButton = new Design("=", 30);
         openparenthesisButton = new Design("(", 30);
-        openparenthesisButton.addActionListener(this);
         closeparenthesisButton = new Design(")", 30);
-        closeparenthesisButton.addActionListener(this);
         percentageButton = new Design("%", 30); // modulus
         positivenegativeButton = new Design("±", 30);
         shiftButton = new Design ("SHIFT", 15);
@@ -71,7 +69,6 @@ public class Calculator implements ActionListener
         modulusButton = new Design("|x|", 15);
         ceilButton = new Design("⌈CEIL⌉", 15);
         floorButton = new Design("⌊ FLR ⌋", 15);
-        lowercasepiButton = new Design("π", 15);
         sinButton = new Design("sin", 15);
         cosButton = new Design("cos", 15);
         tanButton = new Design("tan", 15);
@@ -105,7 +102,6 @@ public class Calculator implements ActionListener
         modulusButton.setBackground(Color.decode("#505050"));
         ceilButton.setBackground(Color.decode("#505050"));
         floorButton.setBackground(Color.decode("#505050"));
-        lowercasepiButton.setBackground(Color.decode("#505050"));
         sinButton.setBackground(Color.decode("#505050"));
         cosButton.setBackground(Color.decode("#505050"));
         tanButton.setBackground(Color.decode("#505050"));
@@ -139,18 +135,17 @@ public class Calculator implements ActionListener
         functionButtons[20] = factorialButton;
         functionButtons[21] = ceilButton;
         functionButtons[22] = floorButton;
-        functionButtons[23] = lowercasepiButton;
-        functionButtons[24] = sinButton;
-        functionButtons[25] = cosButton;
-        functionButtons[26] = tanButton;
-        functionButtons[27] = squarerootButton;
-        functionButtons[28] = permutationButton;
-        functionButtons[29] = combinationButton;
-        functionButtons[30] = customexponentButton;
-        functionButtons[31] = logarithmButton;
+        functionButtons[23] = sinButton;
+        functionButtons[24] = cosButton;
+        functionButtons[25] = tanButton;
+        functionButtons[26] = squarerootButton;
+        functionButtons[27] = permutationButton;
+        functionButtons[28] = combinationButton;
+        functionButtons[29] = customexponentButton;
+        functionButtons[30] = logarithmButton;
         
         
-    for(int i=0; i<32; i++)
+    for(int i=0; i<31; i++)
     {
         functionButtons[i].addActionListener(this);
         functionButtons[i].setForeground(Color.WHITE);
@@ -191,18 +186,17 @@ public class Calculator implements ActionListener
         factorialButton.setBounds(50, 236, 110, 30);
         ceilButton.setBounds(170, 236, 110, 30);
         floorButton.setBounds(290, 236, 110, 30);
-        lowercasepiButton.setBounds(410, 236, 110, 30);
-        sinButton.setBounds(530, 236, 110,30);
-        cosButton.setBounds(50, 285, 110, 30);
-        tanButton.setBounds(170, 285, 110, 30);
-        squarerootButton.setBounds(290, 285, 110, 30);
-        permutationButton.setBounds(410, 285, 110, 30);
-        combinationButton.setBounds(530, 285, 110, 30);
-        customexponentButton.setBounds(50, 334, 110, 30);
-        logarithmButton.setBounds(170, 334, 110, 30);
+        sinButton.setBounds(410, 236, 110, 30);
+        cosButton.setBounds(530, 236, 110,30);
+        tanButton.setBounds(50, 285, 110, 30);
+        squarerootButton.setBounds(170, 285, 110, 30);
+        permutationButton.setBounds(290, 285, 110, 30);
+        combinationButton.setBounds(410, 285, 110, 30);
+        customexponentButton.setBounds(530, 285, 110, 30);
+        logarithmButton.setBounds(50, 334, 110, 30);
       
         panel = new JPanel();
-        panel.setBounds (50, 395, 500, 200);
+        panel.setBounds (50, 395, 590, 550);
         panel.setLayout (new GridLayout(4, 4, 10, 10));
         //panel.setBackground(Color.GRAY);
          
@@ -242,7 +236,6 @@ public class Calculator implements ActionListener
         frame.add(integralButton);
         frame.add(ceilButton);
         frame.add(floorButton);
-        frame.add(lowercasepiButton);
         frame.add(sinButton);
         frame.add(cosButton);
         frame.add(tanButton);
@@ -493,13 +486,14 @@ public class Calculator implements ActionListener
     { //Min Max Button
         new MinMaxIO();
     }
-
+    
     if (e.getSource() == permutationButton)
     {//Permutation Button
     new PermutationCalc(textfield);    
     }
 
-    if(e.getSource() == combinationButton) {
+    if(e.getSource() == combinationButton) 
+    { //Combination Button
         new CombinationCalc(textfield);
     }
 
@@ -665,37 +659,48 @@ public class Calculator implements ActionListener
     }
 
     
-    public double evaluateExpression(String expression) {
+   public double evaluateExpression(String expression) {
     expression = expression.replaceAll("\\s+", ""); 
     Stack<Double> values = new Stack<>();
     Stack<Character> operators = new Stack<>();
 
-    boolean expectNegativeNumber = true;
+    boolean expectNegativeNumber = true; 
 
     StringBuilder number = new StringBuilder();
 
     for (int i = 0; i < expression.length(); i++) {
         char currentChar = expression.charAt(i);
 
+       
+        
         if (Character.isDigit(currentChar) || currentChar == '.') {
             number.append(currentChar);
             expectNegativeNumber = false; 
-        } else if (currentChar == '-' && expectNegativeNumber) {
+        } 
 
-            number.append(currentChar);
+        else if (currentChar == '-' && expectNegativeNumber) {
+            number.append(currentChar); 
             expectNegativeNumber = false;
-        } else if (currentChar == '(') {
-
+        } 
+        
+        else if (currentChar == '(') {
             operators.push(currentChar);
             expectNegativeNumber = true; 
-        } else if (currentChar == ')') {
-
+        } 
+ 
+        else if (currentChar == ')') {
+            if (number.length() > 0) {
+                values.push(Double.parseDouble(number.toString()));
+                number.setLength(0); 
+            }
             while (!operators.isEmpty() && operators.peek() != '(') {
                 values.push(applyOperator(operators.pop(), values.pop(), values.pop()));
             }
-            operators.pop(); 
-        } else {
-            
+            operators.pop();
+        } 
+
+        else {
+
             if (number.length() > 0) {
                 values.push(Double.parseDouble(number.toString()));
                 number.setLength(0); 
@@ -705,25 +710,22 @@ public class Calculator implements ActionListener
                 while (!operators.isEmpty() && precedence(operators.peek()) >= precedence(currentChar)) {
                     values.push(applyOperator(operators.pop(), values.pop(), values.pop()));
                 }
-                operators.push(currentChar);
+                operators.push(currentChar); 
                 expectNegativeNumber = true; 
             }
         }
     }
 
-    
     if (number.length() > 0) {
         values.push(Double.parseDouble(number.toString()));
     }
-
 
     while (!operators.isEmpty()) {
         values.push(applyOperator(operators.pop(), values.pop(), values.pop()));
     }
 
-    return values.pop();
+    return values.pop(); 
 }
-
 
     private boolean isOperator(char c) 
     {
