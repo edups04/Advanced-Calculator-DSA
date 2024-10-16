@@ -22,7 +22,7 @@ public class Calculator implements ActionListener
     JButton doublesummationButton, summationButton, capitalpiButton, doublepiButton, modulusButton;
     JButton ceilButton, floorButton, lowercasepiButton, sinButton, cosButton, tanButton;
     JButton squarerootButton, permutationButton, combinationButton, factorialButton, customexponentButton, logarithmButton;
-    JButton cuberootButton, nestedPowerButton, integralButton, matrixButton;
+    JButton cuberootButton, nestedPowerButton, intDivButton, matrixButton;
 
     JPanel panel;
 
@@ -84,7 +84,7 @@ public class Calculator implements ActionListener
         logarithmButton = new Design("logₙy", 15);
         cuberootButton = new Design ("∛", 15);
         nestedPowerButton = new Design("x^(y^z)", 15);
-        integralButton = new Design("∫", 15);
+        intDivButton = new Design("//", 15);
         matrixButton = new Design("[   ]", 15);
         
         addButton.setBackground(Color.decode("#ff9500"));
@@ -121,7 +121,7 @@ public class Calculator implements ActionListener
         logarithmButton.setBackground(Color.decode("#505050"));
         cuberootButton.setBackground(Color.decode("#505050"));
         nestedPowerButton.setBackground(Color.decode("#505050"));
-        integralButton.setBackground(Color.decode("#505050"));
+        intDivButton.setBackground(Color.decode("#505050"));
         matrixButton.setBackground(Color.decode("#505050"));
         
         functionButtons[0] = addButton;
@@ -157,7 +157,7 @@ public class Calculator implements ActionListener
         functionButtons[30] = logarithmButton;
         functionButtons[31] = cuberootButton;
         functionButtons[32] = nestedPowerButton;
-        functionButtons[33] = integralButton;
+        functionButtons[33] = intDivButton;
         functionButtons[34] = matrixButton;
         
     for(int i=0; i<35; i++)
@@ -211,7 +211,7 @@ public class Calculator implements ActionListener
         logarithmButton.setBounds(50, 334, 110, 30);
         cuberootButton.setBounds(170, 334, 110, 30);
         nestedPowerButton.setBounds(290, 334, 110, 30);
-        integralButton.setBounds(410, 334, 110, 30);
+        intDivButton.setBounds(410, 334, 110, 30);
         matrixButton.setBounds(530, 334, 110, 30);
  
     
@@ -242,7 +242,7 @@ public class Calculator implements ActionListener
         panel.add(percentageButton);
         panel.add(equalButton);
         panel.add(nestedPowerButton);
-        panel.add(integralButton);
+        panel.add(intDivButton);
         panel.add(matrixButton);
         panel.setBackground(Color.decode("#1c1c1c"));
          
@@ -271,7 +271,7 @@ public class Calculator implements ActionListener
         frame.add(logarithmButton);
         frame.add(cuberootButton);
         frame.add(nestedPowerButton);
-        frame.add(integralButton);
+        frame.add(intDivButton);
         frame.add(matrixButton);
         frame.setBackground(Color.decode("#1c1c1c"));
         frame.setVisible(true);    
@@ -390,69 +390,79 @@ public class Calculator implements ActionListener
         operator = '/';
     }
     
-  if (e.getSource() == equalButton) 
-    {
+  if (e.getSource() == equalButton) {
     String expression = textfield.getText();
+
+    // Check for floor division operator
+    if (expression.contains("//")) {
+        // Split the expression by the floor division operator
+        String[] parts = expression.split("//");
+        if (parts.length == 2) {
+            try {
+                double num1 = Double.parseDouble(parts[0].trim());
+                double num2 = Double.parseDouble(parts[1].trim());
+                if (num2 == 0) {
+                    textfield.setText("Error - division by zero");
+                    return;
+                }
+                // Perform floor division
+                double result = Math.floor(num1 / num2);
+                textfield.setText(String.valueOf(result)); // Display only the result
+                return; // Exit to prevent further evaluation
+            } catch (NumberFormatException ex) {
+                textfield.setText("Error - invalid input!");
+                return;
+            }
+        }
+    }
 
     // Check if square root is being calculated
     if (expression.contains("√")) {
         // Extract the number after the square root symbol
         String[] parts = expression.split("√");
-        if (parts.length == 2 && !parts[1].isEmpty()) 
-        {
-            try 
-            {
+        if (parts.length == 2 && !parts[1].isEmpty()) {
+            try {
                 double value = Double.parseDouble(parts[1].trim()); // Get the number after square root symbol
                 double result = Math.sqrt(value); // Calculate square root
-                textfield.setText("√" + value + " = " + result); // Display the result
-            } 
-            catch (NumberFormatException ex) 
-            {
+                textfield.setText(String.valueOf(result)); // Display only the result
+                return; // Exit to prevent further evaluation
+            } catch (NumberFormatException ex) {
                 textfield.setText("Error - invalid input!");
+                return;
             }
-        } 
-        else 
-        {
+        } else {
             textfield.setText("Error - invalid input!");
+            return;
         }
     }
     // Check if cube root is being calculated
-    else if (expression.contains("∛")) 
-    {
+    else if (expression.contains("∛")) {
         // Extract the number after the cube root symbol
         String[] parts = expression.split("∛");
-        if (parts.length == 2 && !parts[1].isEmpty()) 
-        {
-            try 
-            {
+        if (parts.length == 2 && !parts[1].isEmpty()) {
+            try {
                 double value = Double.parseDouble(parts[1].trim()); // Get the number after cube root symbol
                 double result = Math.cbrt(value); // Calculate cube root
-                textfield.setText("∛" + value + " = " + result); // Display the result
-            } 
-            catch (NumberFormatException ex) 
-            {
+                textfield.setText(String.valueOf(result)); // Display only the result
+                return; // Exit to prevent further evaluation
+            } catch (NumberFormatException ex) {
                 textfield.setText("Error - invalid input!");
+                return;
             }
-        } 
-        else 
-        {
+        } else {
             textfield.setText("Error - invalid input!");
+            return;
         }
     }
-    else 
-    {
-        // Handle other expressions normally
-        try 
-        {
-            // Evaluate factorial if present
-            expression = evaluateFactorial(expression);
-            double result = evaluateExpression(expression);
-            textfield.setText(String.valueOf(result));
-        } 
-        catch (Exception ex) 
-        {
-            textfield.setText("Error: " + ex.getMessage());
-        }
+
+    // Handle other expressions normally
+    try {
+        // Evaluate factorial if present
+        expression = evaluateFactorial(expression);
+        double result = evaluateExpression(expression);
+        textfield.setText(String.valueOf(result)); // Display the result of other expressions
+    } catch (Exception ex) {
+        textfield.setText("Error: " + ex.getMessage());
     }
 }
 
@@ -712,16 +722,16 @@ public class Calculator implements ActionListener
         }
     }
     
-    if (e.getSource() == integralButton) 
-    { //Calculus Functions
-        new PolynomialCalc().setVisible(true);
-    }
-
     if (e.getSource() == matrixButton)
     { // Matrices
         new MatrixCalc().setVisible(true);
     }
     
+     if (e.getSource() == intDivButton) 
+    { // Floor Division Button
+        textfield.setText(textfield.getText().concat(" // "));
+        operator = '/'; // Set to the same operator for future evaluation
+    }
 }  
 
     //helper functions
@@ -815,14 +825,34 @@ public class Calculator implements ActionListener
     
     public double evaluateExpression(String expression) {
     expression = expression.replaceAll("\\s+", "");  // Remove any spaces from the expression
+    
+    // Temporary variables for storing processed expressions
+    StringBuilder processedExpression = new StringBuilder();
+    
+    int i = 0;
+    while (i < expression.length()) {
+        char currentChar = expression.charAt(i);
+        
+        // Check for integer division operator `//`
+        if (currentChar == '/' && (i + 1 < expression.length() && expression.charAt(i + 1) == '/')) {
+            // Append a unique placeholder for integer division
+            processedExpression.append("§");
+            i += 2; // Skip the next character
+        } else {
+            processedExpression.append(currentChar);
+            i++;
+        }
+    }
+
+    // Now we will evaluate the processed expression
     Stack<Double> values = new Stack<>();
     Stack<Character> operators = new Stack<>();
 
     boolean expectNegativeNumber = true;
     StringBuilder numberBuilder = new StringBuilder();
 
-    for (int i = 0; i < expression.length(); i++) {
-        char currentChar = expression.charAt(i);
+    for (int j = 0; j < processedExpression.length(); j++) {
+        char currentChar = processedExpression.charAt(j);
 
         if (Character.isDigit(currentChar) || currentChar == '.') {
             numberBuilder.append(currentChar);
@@ -866,8 +896,20 @@ public class Calculator implements ActionListener
         values.push(Double.parseDouble(numberBuilder.toString()));
     }
 
+    // Now handle the placeholder for integer division
     while (!operators.isEmpty()) {
-        values.push(applyOperator(operators.pop(), values.pop(), values.pop()));
+        char operator = operators.pop();
+        if (operator == '§') {
+            // Perform integer division for `//`
+            double denominator = values.pop();
+            double numerator = values.pop();
+            if (denominator == 0) {
+                throw new ArithmeticException("Division by zero");
+            }
+            values.push(Math.floor(numerator / denominator)); // Integer division
+        } else {
+            values.push(applyOperator(operator, values.pop(), values.pop()));
+        }
     }
 
     return values.pop();
