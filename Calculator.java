@@ -10,17 +10,19 @@ public class Calculator implements ActionListener
     double base = 0; 
     double exponent = 0; 
     boolean isExponentMode = false;
+    private boolean isCubeRootMode = false;
     
     JFrame frame;
     JTextField textfield;
     JButton[] numberButtons = new JButton[10]; // Number Buttons
-    JButton[] functionButtons = new JButton[31]; // Function Buttons
+    JButton[] functionButtons = new JButton[32]; // Function Buttons
     JButton addButton, subButton, multiButton, divButton;
     JButton decimalButton, equalButton, openparenthesisButton, closeparenthesisButton, percentageButton, positivenegativeButton;
     JButton shiftButton, minmaxButton, absoluteButton, roundButton, delButton, clearButton;
     JButton doublesummationButton, summationButton, capitalpiButton, doublepiButton, modulusButton;
     JButton ceilButton, floorButton, lowercasepiButton, sinButton, cosButton, tanButton;
     JButton squarerootButton, permutationButton, combinationButton, factorialButton, customexponentButton, logarithmButton;
+    JButton cuberootButton;
     JPanel panel;
 
     Font largeFont = new Font("SansSerif", Font.PLAIN, 40);
@@ -79,6 +81,7 @@ public class Calculator implements ActionListener
         factorialButton = new Design("!", 15);
         customexponentButton = new Design("xʸ", 15);
         logarithmButton = new Design("logₙy", 15);
+        cuberootButton = new Design ("∛", 15);
         
         addButton.setBackground(Color.decode("#ff9500"));
         subButton.setBackground(Color.decode("#ff9500"));
@@ -111,6 +114,8 @@ public class Calculator implements ActionListener
         combinationButton.setBackground(Color.decode("#505050"));
         factorialButton.setBackground(Color.decode("#505050"));
         customexponentButton.setBackground(Color.decode("#505050"));
+        logarithmButton.setBackground(Color.decode("#505050"));
+        cuberootButton.setBackground(Color.decode("#505050"));
         
         functionButtons[0] = addButton;
         functionButtons[1] = subButton;
@@ -143,8 +148,9 @@ public class Calculator implements ActionListener
         functionButtons[28] = combinationButton;
         functionButtons[29] = customexponentButton;
         functionButtons[30] = logarithmButton;
+        functionButtons[31] = cuberootButton;
         
-    for(int i=0; i<31; i++)
+    for(int i=0; i<32; i++)
     {
         functionButtons[i].addActionListener(this);
         functionButtons[i].setForeground(Color.WHITE);
@@ -193,6 +199,7 @@ public class Calculator implements ActionListener
         combinationButton.setBounds(410, 285, 110, 30);
         customexponentButton.setBounds(530, 285, 110, 30);
         logarithmButton.setBounds(50, 334, 110, 30);
+        cuberootButton.setBounds(170, 334, 110, 30);
 
         panel = new JPanel();
         panel.setBounds (50, 395, 590, 550);
@@ -244,6 +251,7 @@ public class Calculator implements ActionListener
         frame.add(factorialButton);
         frame.add(customexponentButton);
         frame.add(logarithmButton);
+        frame.add(cuberootButton);
         frame.setBackground(Color.decode("#1c1c1c"));
         frame.setVisible(true);    
     }
@@ -264,7 +272,11 @@ public class Calculator implements ActionListener
         }
     }
     
- 
+    if (e.getSource() == cuberootButton) {
+        textfield.setText(textfield.getText().concat("∛")); // Concatenate the cube root symbol
+        isCubeRootMode = true; // Set cube root mode
+    }
+     
     if (e.getSource() == decimalButton) 
     { //Decimal Button
         textfield.setText(textfield.getText().concat("."));
@@ -340,47 +352,56 @@ public class Calculator implements ActionListener
         operator = '/';
     }
     
-if (e.getSource() == equalButton) 
+  if (e.getSource() == equalButton) 
 {
-    // Check if in exponent mode
-    if (isExponentMode) 
-    {
-        String currentInput = textfield.getText();
-        
-        // Check if there is an exponent value entered after the ^
-        if (currentInput.contains("^")) {
-            // Split the input to get the base and the exponent
-            String[] parts = currentInput.split("\\^");
-            if (parts.length == 2) {
-                try {
-                    double exponent = Double.parseDouble(parts[1].trim()); // Get the exponent value
-                    double result = Math.pow(base, exponent); // Calculate base^exponent
-                    textfield.setText(String.valueOf(result)); // Display the result
-                } catch (NumberFormatException ex) {
-                    textfield.setText("Error - invalid exponent!");
-                }
+    String expression = textfield.getText();
+
+    // Check if square root is being calculated
+    if (expression.contains("√")) {
+        // Extract the number after the square root symbol
+        String[] parts = expression.split("√");
+        if (parts.length == 2 && !parts[1].isEmpty()) {
+            try {
+                double value = Double.parseDouble(parts[1].trim()); // Get the number after square root symbol
+                double result = Math.sqrt(value); // Calculate square root
+                textfield.setText("√" + value + " = " + result); // Display the result
+            } catch (NumberFormatException ex) {
+                textfield.setText("Error - invalid input!");
             }
-        } 
-        isExponentMode = false; // Reset exponent mode
-    } 
+        } else {
+            textfield.setText("Error - invalid input!");
+        }
+    }
+    // Check if cube root is being calculated
+    else if (expression.contains("∛")) {
+        // Extract the number after the cube root symbol
+        String[] parts = expression.split("∛");
+        if (parts.length == 2 && !parts[1].isEmpty()) {
+            try {
+                double value = Double.parseDouble(parts[1].trim()); // Get the number after cube root symbol
+                double result = Math.cbrt(value); // Calculate cube root
+                textfield.setText("∛" + value + " = " + result); // Display the result
+            } catch (NumberFormatException ex) {
+                textfield.setText("Error - invalid input!");
+            }
+        } else {
+            textfield.setText("Error - invalid input!");
+        }
+    }
     else 
     {
         // Handle other expressions normally
-       String expression = textfield.getText();
-    
-    try {
-        // Evaluate factorial if present
-        expression = evaluateFactorial(expression);
-        
-        // Handle other expressions normally
-        double result = evaluateExpression(expression);
-        textfield.setText(String.valueOf(result));
-    } catch (Exception ex) {
-        textfield.setText("Error: " + ex.getMessage());
+        try {
+            // Evaluate factorial if present
+            expression = evaluateFactorial(expression);
+            double result = evaluateExpression(expression);
+            textfield.setText(String.valueOf(result));
+        } catch (Exception ex) {
+            textfield.setText("Error: " + ex.getMessage());
+        }
     }
-  }
 }
-    
+
     if (e.getSource() == clearButton) 
     { //Clear Button
         textfield.setText("");
