@@ -15,18 +15,14 @@ public class Calculator implements ActionListener
     JFrame frame;
     JTextField textfield;
     JButton[] numberButtons = new JButton[10]; // Number Buttons
-    JButton[] functionButtons = new JButton[32]; // Function Buttons
+    JButton[] functionButtons = new JButton[33]; // Function Buttons
     JButton addButton, subButton, multiButton, divButton;
     JButton decimalButton, equalButton, openparenthesisButton, closeparenthesisButton, percentageButton, positivenegativeButton;
     JButton shiftButton, minmaxButton, absoluteButton, roundButton, delButton, clearButton;
     JButton doublesummationButton, summationButton, capitalpiButton, doublepiButton, modulusButton;
     JButton ceilButton, floorButton, lowercasepiButton, sinButton, cosButton, tanButton;
     JButton squarerootButton, permutationButton, combinationButton, factorialButton, customexponentButton, logarithmButton;
-    JButton cuberootButton;
-    JButton nestedPowerButton = new JButton("x^(y^z)");
-    JButton doubleSummationButton = new JButton("Double Summation");
-    JButton doublePiButton = new JButton("Double Pi");
-
+    JButton cuberootButton, nestedPowerButton;
 
     JPanel panel;
 
@@ -87,6 +83,7 @@ public class Calculator implements ActionListener
         customexponentButton = new Design("xʸ", 15);
         logarithmButton = new Design("logₙy", 15);
         cuberootButton = new Design ("∛", 15);
+        nestedPowerButton = new Design("x^(y^z)", 15);
         
         addButton.setBackground(Color.decode("#ff9500"));
         subButton.setBackground(Color.decode("#ff9500"));
@@ -121,6 +118,7 @@ public class Calculator implements ActionListener
         customexponentButton.setBackground(Color.decode("#505050"));
         logarithmButton.setBackground(Color.decode("#505050"));
         cuberootButton.setBackground(Color.decode("#505050"));
+        nestedPowerButton.setBackground(Color.decode("#505050"));
         
         functionButtons[0] = addButton;
         functionButtons[1] = subButton;
@@ -154,8 +152,9 @@ public class Calculator implements ActionListener
         functionButtons[29] = customexponentButton;
         functionButtons[30] = logarithmButton;
         functionButtons[31] = cuberootButton;
+        functionButtons[32] = nestedPowerButton;
         
-    for(int i=0; i<32; i++)
+    for(int i=0; i<33; i++)
     {
         functionButtons[i].addActionListener(this);
         functionButtons[i].setForeground(Color.WHITE);
@@ -206,10 +205,11 @@ public class Calculator implements ActionListener
         logarithmButton.setBounds(50, 334, 110, 30);
         cuberootButton.setBounds(170, 334, 110, 30);
         nestedPowerButton.setBounds(290, 334, 110, 30);
+ 
     
 
         panel = new JPanel();
-        panel.setBounds (50, 395, 590, 200);
+        panel.setBounds (50, 395, 590, 550);
         panel.setLayout (new GridLayout(4, 4, 10, 10));
         //panel.setBackground(Color.GRAY);
          
@@ -234,8 +234,7 @@ public class Calculator implements ActionListener
         panel.add(percentageButton);
         panel.add(equalButton);
         panel.add(nestedPowerButton);
-        panel.add(doubleSummationButton);
-        panel.add(doublePiButton);
+
 
 
         panel.setBackground(Color.decode("#1c1c1c"));
@@ -264,6 +263,7 @@ public class Calculator implements ActionListener
         frame.add(customexponentButton);
         frame.add(logarithmButton);
         frame.add(cuberootButton);
+        frame.add(nestedPowerButton);
         frame.setBackground(Color.decode("#1c1c1c"));
         frame.setVisible(true);    
     }
@@ -351,28 +351,21 @@ public class Calculator implements ActionListener
         textfield.setText(textfield.getText().concat(" - "));
         operator = '-';
     }
-
-    nestedPowerButton.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            new NestedPowerCalc();  // Opens the pop-up window for nested powers
-        }
-    });
-
-    doubleSummationButton.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            new DoubleSummationCalc();  // Opens the pop-up window for double summation
-        }
-    });
     
-    doublePiButton.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            new DoublePiCalc();  // Opens the pop-up window for double Pi calculation
-        }
-    });
-    
+      
+      if (e.getSource() == nestedPowerButton) 
+    { 
+        new NestedPowerCalc();
+    }
+        if (e.getSource() == doublepiButton) 
+    { 
+        new DoublePiCalc();
+    }
+   
+       if (e.getSource() == doublesummationButton) 
+    {
+        new DoubleSummationCalc();
+    } 
     
     
     if (e.getSource() == multiButton) 
@@ -573,20 +566,6 @@ public class Calculator implements ActionListener
     if(e.getSource() == combinationButton) 
     { //Combination Button
         new CombinationCalc(textfield);
-    }
-    
-        if (e.getSource() == doublesummationButton) 
-    {
-        String input = textfield.getText(); // Get input from the user
-        double sumResult = calculateDoubleSummation(input); // Call the double summation method
-        textfield.setText(String.valueOf(sumResult)); // Display the result
-    }
-
-    if (e.getSource() == doublepiButton) 
-    {
-        String input = textfield.getText(); // Get input from the user
-        double productResult = calculateDoubleProduct(input); // Call the double product calculation method
-        textfield.setText(String.valueOf(productResult)); // Display the result
     }
     
     if (e.getSource() == factorialButton) 
