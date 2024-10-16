@@ -2,7 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*; 
 import java.util.Stack;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Calculator implements ActionListener
 {                                           
@@ -110,7 +111,6 @@ public class Calculator implements ActionListener
         combinationButton.setBackground(Color.decode("#505050"));
         factorialButton.setBackground(Color.decode("#505050"));
         customexponentButton.setBackground(Color.decode("#505050"));
-        logarithmButton.setBackground(Color.decode("#505050"));
         
         functionButtons[0] = addButton;
         functionButtons[1] = subButton;
@@ -143,7 +143,6 @@ public class Calculator implements ActionListener
         functionButtons[28] = combinationButton;
         functionButtons[29] = customexponentButton;
         functionButtons[30] = logarithmButton;
-        
         
     for(int i=0; i<31; i++)
     {
@@ -194,7 +193,7 @@ public class Calculator implements ActionListener
         combinationButton.setBounds(410, 285, 110, 30);
         customexponentButton.setBounds(530, 285, 110, 30);
         logarithmButton.setBounds(50, 334, 110, 30);
-      
+
         panel = new JPanel();
         panel.setBounds (50, 395, 590, 550);
         panel.setLayout (new GridLayout(4, 4, 10, 10));
@@ -264,7 +263,8 @@ public class Calculator implements ActionListener
             textfield.setText(textfield.getText().concat(String.valueOf(i)));
         }
     }
-
+    
+ 
     if (e.getSource() == decimalButton) 
     { //Decimal Button
         textfield.setText(textfield.getText().concat("."));
@@ -340,36 +340,46 @@ public class Calculator implements ActionListener
         operator = '/';
     }
     
-    if (e.getSource() == equalButton) 
-    { //Equal Button
-        String expression = textfield.getText();
+if (e.getSource() == equalButton) 
+{
+    // Check if in exponent mode
+    if (isExponentMode) 
+    {
+        String currentInput = textfield.getText();
         
-        if (expression.startsWith("√")) 
-        { 
-            num1 = Double.parseDouble(expression.substring(1));
-            result = Math.sqrt(num1);
-            textfield.setText(String.valueOf(result)); 
-        } 
-        else if (isExponentMode) 
-        { // Handle exponent mode
-            double exponent = Double.parseDouble(textfield.getText());
-            result = Math.pow(base, exponent);
-            textfield.setText(base + " ^ " + exponent + " = " + result); 
-            isExponentMode = false; 
-        } 
-        else 
-        {
-            try 
-            {
-                result = evaluateExpression(expression);
-                textfield.setText(String.valueOf(result)); 
-            } 
-            catch (Exception ex) 
-            {
-                textfield.setText("Error");
+        // Check if there is an exponent value entered after the ^
+        if (currentInput.contains("^")) {
+            // Split the input to get the base and the exponent
+            String[] parts = currentInput.split("\\^");
+            if (parts.length == 2) {
+                try {
+                    double exponent = Double.parseDouble(parts[1].trim()); // Get the exponent value
+                    double result = Math.pow(base, exponent); // Calculate base^exponent
+                    textfield.setText(String.valueOf(result)); // Display the result
+                } catch (NumberFormatException ex) {
+                    textfield.setText("Error - invalid exponent!");
+                }
             }
-        }
+        } 
+        isExponentMode = false; // Reset exponent mode
+    } 
+    else 
+    {
+        // Handle other expressions normally
+       String expression = textfield.getText();
+    
+    try {
+        // Evaluate factorial if present
+        expression = evaluateFactorial(expression);
+        
+        // Handle other expressions normally
+        double result = evaluateExpression(expression);
+        textfield.setText(String.valueOf(result));
+    } catch (Exception ex) {
+        textfield.setText("Error: " + ex.getMessage());
     }
+  }
+}
     
     if (e.getSource() == clearButton) 
     { //Clear Button
@@ -441,18 +451,18 @@ public class Calculator implements ActionListener
         textfield.setText(String.valueOf(absolute));
     }
     
-    if (e.getSource() == floorButton) 
-    { //Floor Button
+ if (e.getSource() == floorButton) 
+    { // Floor Button
         double floor = Double.parseDouble(textfield.getText());
-        floor = Math.floor(floor);
-        textfield.setText(String.valueOf(floor));
+        floor = Math.floor(floor); // Perform floor operation
+        textfield.setText(String.valueOf((long) floor == floor ? (long) floor : floor)); // Display as integer if no decimal
     }
-    
+
     if (e.getSource() == ceilButton) 
-    { //Ceiling Button
+    { // Ceiling Button
         double ceil = Double.parseDouble(textfield.getText());
-        ceil = Math.ceil(ceil);
-        textfield.setText(String.valueOf(ceil));
+        ceil = Math.ceil(ceil); // Perform ceil operation
+        textfield.setText(String.valueOf((long) ceil == ceil ? (long) ceil : ceil)); // Display as integer if no decimal
     }
      
     if (e.getSource() == roundButton) 
@@ -468,20 +478,32 @@ public class Calculator implements ActionListener
         operator = '%';
     }
  
-    if (e.getSource() == positivenegativeButton) 
-    { // Positive Negative Button
-        String text = textfield.getText();
- 
-        String[] tokens = text.split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)"); // Split by non-digit boundaries
-        String lastToken = tokens[tokens.length - 1]; // Get the last token
+ if (e.getSource() == positivenegativeButton) 
+{
+    String text = textfield.getText();
 
-    if (!lastToken.isEmpty() && lastToken.matches("-?\\d+(\\.\\d+)?")) {
+    // Split by non-digit boundaries
+    String[] tokens = text.split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
+    String lastToken = tokens[tokens.length - 1]; // Get the last token (number)
+
+    if (!lastToken.isEmpty() && lastToken.matches("-?\\d+(\\.\\d+)?")) 
+    {
         double temp = Double.parseDouble(lastToken);
-        temp *= -1; 
-        text = text.substring(0, text.length() - lastToken.length()) + temp; // Replace the last number
-        textfield.setText(text);
+        temp *= -1; // Toggle the sign (positive/negative)
+        
+        // If it's a whole number, format as integer (remove decimal point)
+        if (temp == (long) temp) {
+            lastToken = String.valueOf((long) temp);  // Display as long integer
+        } else {
+            lastToken = String.valueOf(temp);  // Display as decimal
+        }
+
+        // Replace the last number with the updated value (toggled sign)
+        text = text.substring(0, text.length() - tokens[tokens.length - 1].length()) + lastToken;
+        textfield.setText(text);  // Update the textfield with formatted number
     }
-} 
+}
+
     if (e.getSource() == minmaxButton) 
     { //Min Max Button
         new MinMaxIO();
@@ -512,18 +534,14 @@ public class Calculator implements ActionListener
     }
     
     if (e.getSource() == factorialButton) 
-    { //Factorial Button
-        String input = textfield.getText();
-        try 
-        {
-            double num = Double.parseDouble(input);
-            result = factorial(num);
-            textfield.setText(String.valueOf(result));
-        } 
-        catch (NumberFormatException ex) 
-        {
-            textfield.setText("Invalid input");
-        }
+    {
+    String text = textfield.getText();
+    
+    // Check if the last character is a digit (so we don't add multiple factorials)
+    if (!text.isEmpty() && Character.isDigit(text.charAt(text.length() - 1))) {
+        text += "!";  // Append factorial symbol
+        textfield.setText(text);
+      }
     }
     
     if (e.getSource() == sinButton) 
@@ -553,10 +571,15 @@ public class Calculator implements ActionListener
     }
     
     if (e.getSource() == customexponentButton) 
-    { //Custom Exponent Button
-        isExponentMode = true; 
-        base = Double.parseDouble(textfield.getText()); 
-        textfield.setText(""); 
+    { 
+    // Custom Exponent Button
+    // Store the base value from the textfield
+    String currentInput = textfield.getText();
+    if (!currentInput.isEmpty()) {
+        base = Double.parseDouble(currentInput); // Store base
+        textfield.setText(currentInput + "^"); // Update the display to show the base and exponent symbol
+        isExponentMode = true; // Enable exponent mode
+         }
     }
 
     if (e.getSource() == openparenthesisButton) 
@@ -625,10 +648,10 @@ public class Calculator implements ActionListener
         catch (NumberFormatException ex) 
         {
             textfield.setText("Error, invalid input");
+            }
         }
-    }
-}   
     
+    }  
     private double calculateDoubleSummation(String input) 
 {
     // Parse input, expecting something like "3,4,2,5"
@@ -716,132 +739,136 @@ public class Calculator implements ActionListener
         }
         return result;
     }
-
     
-   public double evaluateExpression(String expression) {
-    expression = expression.replaceAll("\\s+", ""); 
+    public double evaluateExpression(String expression) {
+    expression = expression.replaceAll("\\s+", "");  // Remove any spaces from the expression
     Stack<Double> values = new Stack<>();
     Stack<Character> operators = new Stack<>();
 
-    boolean expectNegativeNumber = true; 
-
-    StringBuilder number = new StringBuilder();
+    boolean expectNegativeNumber = true;
+    StringBuilder numberBuilder = new StringBuilder();
 
     for (int i = 0; i < expression.length(); i++) {
         char currentChar = expression.charAt(i);
 
-       
-        
         if (Character.isDigit(currentChar) || currentChar == '.') {
-            number.append(currentChar);
-            expectNegativeNumber = false; 
-        } 
-
-        else if (currentChar == '-' && expectNegativeNumber) {
-            number.append(currentChar); 
+            numberBuilder.append(currentChar);
             expectNegativeNumber = false;
-        } 
-        
-        else if (currentChar == '(') {
+        } else if (currentChar == '-' && expectNegativeNumber) {
+            numberBuilder.append(currentChar);
+            expectNegativeNumber = false;
+        } else if (currentChar == '(') {
             operators.push(currentChar);
-            expectNegativeNumber = true; 
-        } 
- 
-        else if (currentChar == ')') {
-            if (number.length() > 0) {
-                values.push(Double.parseDouble(number.toString()));
-                number.setLength(0); 
+            expectNegativeNumber = true;
+        } else if (currentChar == ')') {
+            if (numberBuilder.length() > 0) {
+                values.push(Double.parseDouble(numberBuilder.toString()));
+                numberBuilder.setLength(0);
             }
             while (!operators.isEmpty() && operators.peek() != '(') {
                 values.push(applyOperator(operators.pop(), values.pop(), values.pop()));
             }
             operators.pop();
-        } 
-
-        else {
-
-            if (number.length() > 0) {
-                values.push(Double.parseDouble(number.toString()));
-                number.setLength(0); 
+        } else {
+            if (numberBuilder.length() > 0) {
+                values.push(Double.parseDouble(numberBuilder.toString()));
+                numberBuilder.setLength(0);
             }
 
-            if (isOperator(currentChar)) {
+            if (isOperator(currentChar) || currentChar == '^') {
                 while (!operators.isEmpty() && precedence(operators.peek()) >= precedence(currentChar)) {
+                    // Handle right associativity for exponentiation
+                    if (currentChar == '^' && operators.peek() == '^') {
+                        break; // Do not evaluate if the top of the stack is also exponentiation
+                    }
                     values.push(applyOperator(operators.pop(), values.pop(), values.pop()));
                 }
-                operators.push(currentChar); 
-                expectNegativeNumber = true; 
+                operators.push(currentChar);
+                expectNegativeNumber = true;
             }
         }
     }
 
-    if (number.length() > 0) {
-        values.push(Double.parseDouble(number.toString()));
+    if (numberBuilder.length() > 0) {
+        values.push(Double.parseDouble(numberBuilder.toString()));
     }
 
     while (!operators.isEmpty()) {
         values.push(applyOperator(operators.pop(), values.pop(), values.pop()));
     }
 
-    return values.pop(); 
+    return values.pop();
 }
-
+    
     private boolean isOperator(char c) 
     {
         return c == '+' || c == '-' || c == '×' || c == '÷' || c == '%';
     }
 
-    private int precedence(char operator) 
-    {
-        switch (operator) 
-        {
-            case '+':
-            case '-':
-                return 1;
-            case '×':
-            case '÷':
-            case '%':
-                return 2;
-            default:
-                return 0;
-        }
+    private int precedence(char operator) {
+    switch (operator) {
+        case '+':
+        case '-':
+            return 1;
+        case '×':
+        case '÷':
+        case '%':
+            return 2;
+        case '^': // Exponentiation has higher precedence
+            return 3;
+        default:
+            return 0;
+    }
+}
+
+    private double applyOperator(char operator, double b, double a) {
+    switch (operator) {
+        case '+':
+            return a + b;
+        case '-':
+            return a - b;
+        case '×':
+            return a * b;
+        case '÷':
+            if (b == 0) {
+                throw new UnsupportedOperationException("Cannot divide by zero");
+            }
+            return a / b;
+        case '%':
+            return a % b;
+        case '^': // Handle exponentiation
+            return Math.pow(a, b);
+        default:
+            throw new UnsupportedOperationException("Unsupported operator: " + operator);
+    }
+}
+
+     private String evaluateFactorial(String expression) throws Exception {
+    // Find factorial in the expression and compute it
+    Pattern factorialPattern = Pattern.compile("(\\d+)!");
+    Matcher matcher = factorialPattern.matcher(expression);
+
+    while (matcher.find()) {
+        // Extract the number before the '!'
+        int number = Integer.parseInt(matcher.group(1));
+
+        // Calculate the factorial
+        long factorial = factorial(number);
+
+        // Replace the factorial part in the expression
+        expression = expression.replaceFirst(matcher.group(0), String.valueOf(factorial));
     }
 
-    private double applyOperator(char operator, double b, double a) 
-    {
-        switch (operator) 
-        {
-            case '+':
-                return a + b;
-            case '-':
-                return a - b;
-            case '×':
-                return a * b;
-            case '÷':
-                if (b == 0) 
-                {
-                    throw new UnsupportedOperationException("Cannot divide by zero");
-                }
-                return a / b;
-            case '%':
-                return a % b;
-            default:
-                throw new UnsupportedOperationException("Unsupported operator: " + operator);
-        }
-    }
+    return expression;
+}
 
-    // Keeping factorial function as it is
-    private static double factorial(double num) 
-    {
-        if (num < 0) 
-        {
-            return 0; 
-        }
-        double result = 1;
-        for (int i = 2; i <= num; i++) 
-        {
-            result *= i;
-        }
-        return result;
+// Factorial calculation method
+private long factorial(int num) throws Exception {
+    if (num < 0) throw new Exception("Factorial of negative number is undefined");
+    long result = 1;
+    for (int i = 2; i <= num; i++) {
+        result *= i;
+    }
+    return result;
     }
 }
