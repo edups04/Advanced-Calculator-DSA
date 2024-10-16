@@ -23,6 +23,8 @@ public class Calculator implements ActionListener
     JButton ceilButton, floorButton, lowercasepiButton, sinButton, cosButton, tanButton;
     JButton squarerootButton, permutationButton, combinationButton, factorialButton, customexponentButton, logarithmButton;
     JButton cuberootButton;
+    JButton nestedPowerButton = new JButton("x^(y^z)");
+
     JPanel panel;
 
     Font largeFont = new Font("SansSerif", Font.PLAIN, 40);
@@ -200,9 +202,11 @@ public class Calculator implements ActionListener
         customexponentButton.setBounds(530, 285, 110, 30);
         logarithmButton.setBounds(50, 334, 110, 30);
         cuberootButton.setBounds(170, 334, 110, 30);
+        nestedPowerButton.setBounds(290, 334, 110, 30);
+    
 
         panel = new JPanel();
-        panel.setBounds (50, 395, 590, 550);
+        panel.setBounds (50, 395, 590, 200);
         panel.setLayout (new GridLayout(4, 4, 10, 10));
         //panel.setBackground(Color.GRAY);
          
@@ -226,6 +230,7 @@ public class Calculator implements ActionListener
         panel.add(decimalButton);
         panel.add(percentageButton);
         panel.add(equalButton);
+        panel.add(nestedPowerButton);
         panel.setBackground(Color.decode("#1c1c1c"));
          
         frame.add(panel);
@@ -339,6 +344,14 @@ public class Calculator implements ActionListener
         textfield.setText(textfield.getText().concat(" - "));
         operator = '-';
     }
+
+    nestedPowerButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            new NestedPowerCalc();  // Opens the pop-up window for nested powers
+        }
+    });
+    
     
     if (e.getSource() == multiButton) 
     { //Multiplication Button
