@@ -24,6 +24,9 @@ public class Calculator implements ActionListener
     JButton squarerootButton, permutationButton, combinationButton, factorialButton, customexponentButton, logarithmButton;
     JButton cuberootButton;
     JButton nestedPowerButton = new JButton("x^(y^z)");
+    JButton doubleSummationButton = new JButton("Double Summation");
+    JButton doublePiButton = new JButton("Double Pi");
+
 
     JPanel panel;
 
@@ -231,6 +234,10 @@ public class Calculator implements ActionListener
         panel.add(percentageButton);
         panel.add(equalButton);
         panel.add(nestedPowerButton);
+        panel.add(doubleSummationButton);
+        panel.add(doublePiButton);
+
+
         panel.setBackground(Color.decode("#1c1c1c"));
          
         frame.add(panel);
@@ -351,6 +358,21 @@ public class Calculator implements ActionListener
             new NestedPowerCalc();  // Opens the pop-up window for nested powers
         }
     });
+
+    doubleSummationButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            new DoubleSummationCalc();  // Opens the pop-up window for double summation
+        }
+    });
+    
+    doublePiButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            new DoublePiCalc();  // Opens the pop-up window for double Pi calculation
+        }
+    });
+    
     
     
     if (e.getSource() == multiButton) 
