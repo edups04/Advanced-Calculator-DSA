@@ -15,14 +15,14 @@ public class Calculator implements ActionListener
     JFrame frame;
     JTextField textfield;
     JButton[] numberButtons = new JButton[10]; // Number Buttons
-    JButton[] functionButtons = new JButton[33]; // Function Buttons
+    JButton[] functionButtons = new JButton[35]; // Function Buttons
     JButton addButton, subButton, multiButton, divButton;
     JButton decimalButton, equalButton, openparenthesisButton, closeparenthesisButton, percentageButton, positivenegativeButton;
     JButton shiftButton, minmaxButton, absoluteButton, roundButton, delButton, clearButton;
     JButton doublesummationButton, summationButton, capitalpiButton, doublepiButton, modulusButton;
     JButton ceilButton, floorButton, lowercasepiButton, sinButton, cosButton, tanButton;
     JButton squarerootButton, permutationButton, combinationButton, factorialButton, customexponentButton, logarithmButton;
-    JButton cuberootButton, nestedPowerButton;
+    JButton cuberootButton, nestedPowerButton, integralButton, matrixButton;
 
     JPanel panel;
 
@@ -35,7 +35,7 @@ public class Calculator implements ActionListener
     Calculator() 
     {
         
-        frame = new JFrame("Advanced/Scientific Calculator");
+        frame = new JFrame("Scientific Calculator");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(720, 999);
         frame.getContentPane().setBackground(Color.decode("#1c1c1c"));
@@ -84,6 +84,8 @@ public class Calculator implements ActionListener
         logarithmButton = new Design("logₙy", 15);
         cuberootButton = new Design ("∛", 15);
         nestedPowerButton = new Design("x^(y^z)", 15);
+        integralButton = new Design("∫", 15);
+        matrixButton = new Design("[   ]", 15);
         
         addButton.setBackground(Color.decode("#ff9500"));
         subButton.setBackground(Color.decode("#ff9500"));
@@ -119,6 +121,8 @@ public class Calculator implements ActionListener
         logarithmButton.setBackground(Color.decode("#505050"));
         cuberootButton.setBackground(Color.decode("#505050"));
         nestedPowerButton.setBackground(Color.decode("#505050"));
+        integralButton.setBackground(Color.decode("#505050"));
+        matrixButton.setBackground(Color.decode("#505050"));
         
         functionButtons[0] = addButton;
         functionButtons[1] = subButton;
@@ -153,8 +157,10 @@ public class Calculator implements ActionListener
         functionButtons[30] = logarithmButton;
         functionButtons[31] = cuberootButton;
         functionButtons[32] = nestedPowerButton;
+        functionButtons[33] = integralButton;
+        functionButtons[34] = matrixButton;
         
-    for(int i=0; i<33; i++)
+    for(int i=0; i<35; i++)
     {
         functionButtons[i].addActionListener(this);
         functionButtons[i].setForeground(Color.WHITE);
@@ -205,6 +211,8 @@ public class Calculator implements ActionListener
         logarithmButton.setBounds(50, 334, 110, 30);
         cuberootButton.setBounds(170, 334, 110, 30);
         nestedPowerButton.setBounds(290, 334, 110, 30);
+        integralButton.setBounds(410, 334, 110, 30);
+        matrixButton.setBounds(530, 334, 110, 30);
  
     
 
@@ -234,9 +242,8 @@ public class Calculator implements ActionListener
         panel.add(percentageButton);
         panel.add(equalButton);
         panel.add(nestedPowerButton);
-
-
-
+        panel.add(integralButton);
+        panel.add(matrixButton);
         panel.setBackground(Color.decode("#1c1c1c"));
          
         frame.add(panel);
@@ -264,6 +271,8 @@ public class Calculator implements ActionListener
         frame.add(logarithmButton);
         frame.add(cuberootButton);
         frame.add(nestedPowerButton);
+        frame.add(integralButton);
+        frame.add(matrixButton);
         frame.setBackground(Color.decode("#1c1c1c"));
         frame.setVisible(true);    
     }
@@ -284,7 +293,8 @@ public class Calculator implements ActionListener
         }
     }
     
-    if (e.getSource() == cuberootButton) {
+    if (e.getSource() == cuberootButton) 
+    {
         textfield.setText(textfield.getText().concat("∛")); // Concatenate the cube root symbol
         isCubeRootMode = true; // Set cube root mode
     }
@@ -381,50 +391,66 @@ public class Calculator implements ActionListener
     }
     
   if (e.getSource() == equalButton) 
-{
+    {
     String expression = textfield.getText();
 
     // Check if square root is being calculated
     if (expression.contains("√")) {
         // Extract the number after the square root symbol
         String[] parts = expression.split("√");
-        if (parts.length == 2 && !parts[1].isEmpty()) {
-            try {
+        if (parts.length == 2 && !parts[1].isEmpty()) 
+        {
+            try 
+            {
                 double value = Double.parseDouble(parts[1].trim()); // Get the number after square root symbol
                 double result = Math.sqrt(value); // Calculate square root
                 textfield.setText("√" + value + " = " + result); // Display the result
-            } catch (NumberFormatException ex) {
+            } 
+            catch (NumberFormatException ex) 
+            {
                 textfield.setText("Error - invalid input!");
             }
-        } else {
+        } 
+        else 
+        {
             textfield.setText("Error - invalid input!");
         }
     }
     // Check if cube root is being calculated
-    else if (expression.contains("∛")) {
+    else if (expression.contains("∛")) 
+    {
         // Extract the number after the cube root symbol
         String[] parts = expression.split("∛");
-        if (parts.length == 2 && !parts[1].isEmpty()) {
-            try {
+        if (parts.length == 2 && !parts[1].isEmpty()) 
+        {
+            try 
+            {
                 double value = Double.parseDouble(parts[1].trim()); // Get the number after cube root symbol
                 double result = Math.cbrt(value); // Calculate cube root
                 textfield.setText("∛" + value + " = " + result); // Display the result
-            } catch (NumberFormatException ex) {
+            } 
+            catch (NumberFormatException ex) 
+            {
                 textfield.setText("Error - invalid input!");
             }
-        } else {
+        } 
+        else 
+        {
             textfield.setText("Error - invalid input!");
         }
     }
     else 
     {
         // Handle other expressions normally
-        try {
+        try 
+        {
             // Evaluate factorial if present
             expression = evaluateFactorial(expression);
             double result = evaluateExpression(expression);
             textfield.setText(String.valueOf(result));
-        } catch (Exception ex) {
+        } 
+        catch (Exception ex) 
+        {
             textfield.setText("Error: " + ex.getMessage());
         }
     }
@@ -527,31 +553,31 @@ public class Calculator implements ActionListener
         operator = '%';
     }
  
- if (e.getSource() == positivenegativeButton) 
-{
-    String text = textfield.getText();
-
-    // Split by non-digit boundaries
-    String[] tokens = text.split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
-    String lastToken = tokens[tokens.length - 1]; // Get the last token (number)
-
-    if (!lastToken.isEmpty() && lastToken.matches("-?\\d+(\\.\\d+)?")) 
+    if (e.getSource() == positivenegativeButton) 
     {
-        double temp = Double.parseDouble(lastToken);
-        temp *= -1; // Toggle the sign (positive/negative)
-        
-        // If it's a whole number, format as integer (remove decimal point)
-        if (temp == (long) temp) {
-            lastToken = String.valueOf((long) temp);  // Display as long integer
-        } else {
-            lastToken = String.valueOf(temp);  // Display as decimal
-        }
+        String text = textfield.getText();
 
-        // Replace the last number with the updated value (toggled sign)
-        text = text.substring(0, text.length() - tokens[tokens.length - 1].length()) + lastToken;
-        textfield.setText(text);  // Update the textfield with formatted number
+        // Split by non-digit boundaries
+        String[] tokens = text.split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
+        String lastToken = tokens[tokens.length - 1]; // Get the last token (number)
+
+        if (!lastToken.isEmpty() && lastToken.matches("-?\\d+(\\.\\d+)?")) 
+        {
+            double temp = Double.parseDouble(lastToken);
+            temp *= -1; // Toggle the sign (positive/negative)
+            
+            // If it's a whole number, format as integer (remove decimal point)
+            if (temp == (long) temp) {
+                lastToken = String.valueOf((long) temp);  // Display as long integer
+            } else {
+                lastToken = String.valueOf(temp);  // Display as decimal
+            }
+
+            // Replace the last number with the updated value (toggled sign)
+            text = text.substring(0, text.length() - tokens[tokens.length - 1].length()) + lastToken;
+            textfield.setText(text);  // Update the textfield with formatted number
+        }
     }
-}
 
     if (e.getSource() == minmaxButton) 
     { //Min Max Button
@@ -683,64 +709,76 @@ public class Calculator implements ActionListener
         catch (NumberFormatException ex) 
         {
             textfield.setText("Error, invalid input");
+        }
+    }
+    
+    if (e.getSource() == integralButton) 
+    { //Calculus Functions
+        new PolynomialCalc().setVisible(true);
+    }
+
+    if (e.getSource() == matrixButton)
+    { // Matrices
+        new MatrixCalc().setVisible(true);
+    }
+    
+}  
+
+    //helper functions
+    private double calculateDoubleSummation(String input) 
+    {
+        // Parse input, expecting something like "3,4,2,5"
+        // where first two numbers represent range 1 and next two represent range 2
+        String[] ranges = input.split(",");
+        
+        // Assuming input gives n and m like "n1,n2,m1,m2" format
+        int n1 = Integer.parseInt(ranges[0].trim());
+        int n2 = Integer.parseInt(ranges[1].trim());
+        int m1 = Integer.parseInt(ranges[2].trim());
+        int m2 = Integer.parseInt(ranges[3].trim());
+        
+        double sum = 0;
+        
+        // Loop through the first range
+        for (int i = n1; i <= n2; i++) 
+        {
+            // Loop through the second range
+            for (int j = m1; j <= m2; j++) 
+            {
+                // Sum i and j (or modify this to suit your specific needs)
+                sum += (i + j); // You can adjust this logic if needed
             }
         }
-    
-    }  
-    private double calculateDoubleSummation(String input) 
-{
-    // Parse input, expecting something like "3,4,2,5"
-    // where first two numbers represent range 1 and next two represent range 2
-    String[] ranges = input.split(",");
-    
-    // Assuming input gives n and m like "n1,n2,m1,m2" format
-    int n1 = Integer.parseInt(ranges[0].trim());
-    int n2 = Integer.parseInt(ranges[1].trim());
-    int m1 = Integer.parseInt(ranges[2].trim());
-    int m2 = Integer.parseInt(ranges[3].trim());
-    
-    double sum = 0;
-    
-    // Loop through the first range
-    for (int i = n1; i <= n2; i++) 
-    {
-        // Loop through the second range
-        for (int j = m1; j <= m2; j++) 
-        {
-            // Sum i and j (or modify this to suit your specific needs)
-            sum += (i + j); // You can adjust this logic if needed
-        }
+        
+        return sum;
     }
-    
-    return sum;
-}
     private double calculateDoubleProduct(String input) 
-{
-    // Parse input, expecting something like "3,4,2,5"
-    // where first two numbers represent range 1 and next two represent range 2
-    String[] ranges = input.split(",");
-    
-    // Assuming input gives n and m like "n1,n2,m1,m2" format
-    int n1 = Integer.parseInt(ranges[0].trim());
-    int n2 = Integer.parseInt(ranges[1].trim());
-    int m1 = Integer.parseInt(ranges[2].trim());
-    int m2 = Integer.parseInt(ranges[3].trim());
-    
-    double product = 1;
-    
-    // Loop through the first range
-    for (int i = n1; i <= n2; i++) 
     {
-        // Loop through the second range
-        for (int j = m1; j <= m2; j++) 
+        // Parse input, expecting something like "3,4,2,5"
+        // where first two numbers represent range 1 and next two represent range 2
+        String[] ranges = input.split(",");
+        
+        // Assuming input gives n and m like "n1,n2,m1,m2" format
+        int n1 = Integer.parseInt(ranges[0].trim());
+        int n2 = Integer.parseInt(ranges[1].trim());
+        int m1 = Integer.parseInt(ranges[2].trim());
+        int m2 = Integer.parseInt(ranges[3].trim());
+        
+        double product = 1;
+        
+        // Loop through the first range
+        for (int i = n1; i <= n2; i++) 
         {
-            // Product of i and j (or modify this to suit your specific needs)
-            product *= (i * j);
+            // Loop through the second range
+            for (int j = m1; j <= m2; j++) 
+            {
+                // Product of i and j (or modify this to suit your specific needs)
+                product *= (i * j);
+            }
         }
+        
+        return product;
     }
-    
-    return product;
-}
 
     private double evaluatePolynomial(String expression, double x) 
     {
