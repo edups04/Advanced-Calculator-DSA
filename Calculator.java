@@ -17,7 +17,7 @@ public class Calculator implements ActionListener
     JButton addButton, subButton, multiButton, divButton;
     JButton decimalButton, equalButton, openparenthesisButton, closeparenthesisButton, percentageButton, positivenegativeButton;
     JButton shiftButton, minmaxButton, absoluteButton, roundButton, delButton, clearButton;
-    JButton matrixButton, summationButton, capitalpiButton, integralButton, modulusButton;
+    JButton doublesummationButton, summationButton, capitalpiButton, doublepiButton, modulusButton;
     JButton ceilButton, floorButton, lowercasepiButton, sinButton, cosButton, tanButton;
     JButton squarerootButton, permutationButton, combinationButton, factorialButton, customexponentButton, logarithmButton;
     JPanel panel;
@@ -62,10 +62,10 @@ public class Calculator implements ActionListener
         roundButton = new Design("ROUND", 15);
         delButton = new Design("DEL", 15);
         clearButton = new Design("AC/ON", 15);
-        matrixButton = new Design("[   ]", 15);
+        doublesummationButton = new Design("∑∑", 15);
         summationButton = new Design("∑", 15);
         capitalpiButton = new Design("Π", 15);
-        integralButton = new Design("∫", 15);
+        doublepiButton = new Design("ΠΠ", 15);
         modulusButton = new Design("|x|", 15);
         ceilButton = new Design("⌈CEIL⌉", 15);
         floorButton = new Design("⌊ FLR ⌋", 15);
@@ -95,10 +95,10 @@ public class Calculator implements ActionListener
         roundButton.setBackground(Color.decode("#505050"));
         delButton.setBackground(Color.decode("#ff9500"));
         clearButton.setBackground(Color.decode("#ff9500"));
-        matrixButton.setBackground(Color.decode("#505050"));
+        doublesummationButton.setBackground(Color.decode("#505050"));
         summationButton.setBackground(Color.decode("#505050"));
         capitalpiButton.setBackground(Color.decode("#505050"));
-        integralButton.setBackground(Color.decode("#505050"));
+        doublepiButton.setBackground(Color.decode("#505050"));
         modulusButton.setBackground(Color.decode("#505050"));
         ceilButton.setBackground(Color.decode("#505050"));
         floorButton.setBackground(Color.decode("#505050"));
@@ -128,10 +128,10 @@ public class Calculator implements ActionListener
         functionButtons[13] = roundButton;
         functionButtons[14] = delButton;
         functionButtons[15] = clearButton;
-        functionButtons[16] = matrixButton;
+        functionButtons[16] = doublesummationButton;
         functionButtons[17] = summationButton;
         functionButtons[18] = capitalpiButton;
-        functionButtons[19] = integralButton;
+        functionButtons[19] = doublepiButton;
         functionButtons[20] = factorialButton;
         functionButtons[21] = ceilButton;
         functionButtons[22] = floorButton;
@@ -179,10 +179,10 @@ public class Calculator implements ActionListener
         minmaxButton.setBounds(170, 138, 110, 30);
         absoluteButton.setBounds(290, 138, 110, 30);
         roundButton.setBounds(50, 187, 110, 30);
-        matrixButton.setBounds(170, 187, 110, 30);
+        doublesummationButton.setBounds(170, 187, 110, 30);
         summationButton.setBounds(290, 187, 110, 30);
         capitalpiButton.setBounds(410, 187, 110, 30);
-        integralButton.setBounds(530, 187, 110, 30);
+        doublepiButton.setBounds(530, 187, 110, 30);
         factorialButton.setBounds(50, 236, 110, 30);
         ceilButton.setBounds(170, 236, 110, 30);
         floorButton.setBounds(290, 236, 110, 30);
@@ -230,10 +230,10 @@ public class Calculator implements ActionListener
         frame.add(minmaxButton);
         frame.add(absoluteButton);
         frame.add(roundButton);
-        frame.add(matrixButton);
+        frame.add(doublesummationButton);
         frame.add(summationButton);
         frame.add(capitalpiButton);
-        frame.add(integralButton);
+        frame.add(doublepiButton);
         frame.add(ceilButton);
         frame.add(floorButton);
         frame.add(sinButton);
@@ -496,15 +496,19 @@ public class Calculator implements ActionListener
     { //Combination Button
         new CombinationCalc(textfield);
     }
-
-    if (e.getSource() == integralButton) 
-    { //Calculus Functions
-        new PolynomialCalc().setVisible(true);
+    
+        if (e.getSource() == doublesummationButton) 
+    {
+        String input = textfield.getText(); // Get input from the user
+        double sumResult = calculateDoubleSummation(input); // Call the double summation method
+        textfield.setText(String.valueOf(sumResult)); // Display the result
     }
 
-    if (e.getSource() == matrixButton)
-    { // Matrices
-        new MatrixCalc().setVisible(true);
+    if (e.getSource() == doublepiButton) 
+    {
+        String input = textfield.getText(); // Get input from the user
+        double productResult = calculateDoubleProduct(input); // Call the double product calculation method
+        textfield.setText(String.valueOf(productResult)); // Display the result
     }
     
     if (e.getSource() == factorialButton) 
@@ -623,6 +627,61 @@ public class Calculator implements ActionListener
             textfield.setText("Error, invalid input");
         }
     }
+}   
+    
+    private double calculateDoubleSummation(String input) 
+{
+    // Parse input, expecting something like "3,4,2,5"
+    // where first two numbers represent range 1 and next two represent range 2
+    String[] ranges = input.split(",");
+    
+    // Assuming input gives n and m like "n1,n2,m1,m2" format
+    int n1 = Integer.parseInt(ranges[0].trim());
+    int n2 = Integer.parseInt(ranges[1].trim());
+    int m1 = Integer.parseInt(ranges[2].trim());
+    int m2 = Integer.parseInt(ranges[3].trim());
+    
+    double sum = 0;
+    
+    // Loop through the first range
+    for (int i = n1; i <= n2; i++) 
+    {
+        // Loop through the second range
+        for (int j = m1; j <= m2; j++) 
+        {
+            // Sum i and j (or modify this to suit your specific needs)
+            sum += (i + j); // You can adjust this logic if needed
+        }
+    }
+    
+    return sum;
+}
+    private double calculateDoubleProduct(String input) 
+{
+    // Parse input, expecting something like "3,4,2,5"
+    // where first two numbers represent range 1 and next two represent range 2
+    String[] ranges = input.split(",");
+    
+    // Assuming input gives n and m like "n1,n2,m1,m2" format
+    int n1 = Integer.parseInt(ranges[0].trim());
+    int n2 = Integer.parseInt(ranges[1].trim());
+    int m1 = Integer.parseInt(ranges[2].trim());
+    int m2 = Integer.parseInt(ranges[3].trim());
+    
+    double product = 1;
+    
+    // Loop through the first range
+    for (int i = n1; i <= n2; i++) 
+    {
+        // Loop through the second range
+        for (int j = m1; j <= m2; j++) 
+        {
+            // Product of i and j (or modify this to suit your specific needs)
+            product *= (i * j);
+        }
+    }
+    
+    return product;
 }
 
     private double evaluatePolynomial(String expression, double x) 
