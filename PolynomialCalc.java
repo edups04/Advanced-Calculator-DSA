@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
  * The only thing that this supports is the basic Power rule for both Differentiation
  * and integration.
  * Please do NOT expect something like a complex triple integral here
- * OR chain rule and definite integrals. That's way out of my league, 
+ * OR chain rule and definite integrals. That's way out of our league, 
  * we only have Calc 1 under our belt.
  */
 public class PolynomialCalc extends JFrame 
