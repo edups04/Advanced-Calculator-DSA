@@ -57,7 +57,7 @@ public class DoubleSummationCalc extends JFrame {
         int d = Integer.parseInt(dField.getText());
 
         // Calculate double summations
-        int result1 = 0, result2 = 0, result3 = 0;
+        int result1 = 0, result2 = 0, result3 = 0, result4 = 0;
 
         // ∑∑ x + y
         for (int i = a; i <= b; i++) {
@@ -73,16 +73,20 @@ public class DoubleSummationCalc extends JFrame {
             }
         }
 
-        // ∑∑ x * y (a=1, b=2, c=1, d=2)
-        for (int i = 1; i <= 2; i++) {
-            for (int j = 1; j <= 2; j++) {
-                result3 += (i * j);
+        // ∑∑ x^y
+        for (int i = a; i <= b; i++) {
+            for (int j = c; j <= d; j++) {
+                result4 += Math.pow(i, j);
             }
         }
 
         // Display results
         resultArea.setText("∑∑ x + y: " + result1 + "\n");
         resultArea.append("∑∑ x * y: " + result2 + "\n");
-        resultArea.append("∑∑ x * y (a=1, b=2, c=1, d=2): " + result3);
+        resultArea.append("∑∑ x^y: " + result4);
+    }
+
+    public static void main(String[] args) {
+        new DoubleSummationCalc();
     }
 }
