@@ -18,7 +18,7 @@ public class Calculator implements ActionListener
     JButton[] functionButtons = new JButton[35]; // Function Buttons
     JButton addButton, subButton, multiButton, divButton;
     JButton decimalButton, equalButton, openparenthesisButton, closeparenthesisButton, percentageButton, positivenegativeButton;
-    JButton shiftButton, minmaxButton, absoluteButton, roundButton, delButton, clearButton;
+    JButton intButton, minmaxButton, absoluteButton, roundButton, delButton, clearButton;
     JButton doublesummationButton, summationButton, capitalpiButton, doublepiButton, modulusButton;
     JButton ceilButton, floorButton, lowercasepiButton, sinButton, cosButton, tanButton;
     JButton squarerootButton, permutationButton, combinationButton, factorialButton, customexponentButton, logarithmButton;
@@ -60,7 +60,7 @@ public class Calculator implements ActionListener
         closeparenthesisButton = new Design(")", 30);
         percentageButton = new Design("%", 30); // modulus
         positivenegativeButton = new Design("±", 30);
-        shiftButton = new Design ("SHIFT", 15);
+        intButton = new Design ("INT", 15);
         minmaxButton = new Design("MinMax", 15);
         absoluteButton = new Design("ABS", 15);
         roundButton = new Design("ROUND", 15);
@@ -97,7 +97,7 @@ public class Calculator implements ActionListener
         positivenegativeButton.setBackground(Color.decode("#ff9500"));
         closeparenthesisButton.setBackground(Color.decode("#ff9500"));
         openparenthesisButton.setBackground(Color.decode("#ff9500"));
-        shiftButton.setBackground(Color.decode("#ff9500"));
+        intButton.setBackground(Color.decode("#ff9500"));
         minmaxButton.setBackground(Color.decode("#505050"));
         absoluteButton.setBackground(Color.decode("#505050"));
         roundButton.setBackground(Color.decode("#505050"));
@@ -134,7 +134,7 @@ public class Calculator implements ActionListener
         functionButtons[7] = closeparenthesisButton;
         functionButtons[8] = percentageButton;
         functionButtons[9] = positivenegativeButton;
-        functionButtons[10] = shiftButton;
+        functionButtons[10] = intButton;
         functionButtons[11] = minmaxButton;
         functionButtons[12] = absoluteButton;
         functionButtons[13] = roundButton;
@@ -190,7 +190,7 @@ public class Calculator implements ActionListener
 
         delButton.setBounds(410, 138, 110, 30);
         clearButton.setBounds(530, 138, 110, 30);
-        shiftButton.setBounds(50, 138, 110, 30);
+        intButton.setBounds(50, 138, 110, 30);
         minmaxButton.setBounds(170, 138, 110, 30);
         absoluteButton.setBounds(290, 138, 110, 30);
         roundButton.setBounds(50, 187, 110, 30);
@@ -250,7 +250,7 @@ public class Calculator implements ActionListener
         frame.add(delButton);
         frame.add(clearButton);
         frame.add(textfield);
-        frame.add(shiftButton);
+        frame.add(intButton);
         frame.add(minmaxButton);
         frame.add(absoluteButton);
         frame.add(roundButton);
@@ -390,82 +390,78 @@ public class Calculator implements ActionListener
         operator = '/';
     }
     
-  if (e.getSource() == equalButton) {
+  if (e.getSource() == equalButton) 
+    {
     String expression = textfield.getText();
-
-    // Check for floor division operator
-    if (expression.contains("//")) {
-        // Split the expression by the floor division operator
-        String[] parts = expression.split("//");
-        if (parts.length == 2) {
-            try {
-                double num1 = Double.parseDouble(parts[0].trim());
-                double num2 = Double.parseDouble(parts[1].trim());
-                if (num2 == 0) {
-                    textfield.setText("Error - division by zero");
-                    return;
-                }
-                // Perform floor division
-                double result = Math.floor(num1 / num2);
-                textfield.setText(String.valueOf(result)); // Display only the result
-                return; // Exit to prevent further evaluation
-            } catch (NumberFormatException ex) {
-                textfield.setText("Error - invalid input!");
-                return;
-            }
-        }
-    }
 
     // Check if square root is being calculated
     if (expression.contains("√")) {
         // Extract the number after the square root symbol
         String[] parts = expression.split("√");
-        if (parts.length == 2 && !parts[1].isEmpty()) {
-            try {
+        if (parts.length == 2 && !parts[1].isEmpty()) 
+        {
+            try 
+            {
                 double value = Double.parseDouble(parts[1].trim()); // Get the number after square root symbol
                 double result = Math.sqrt(value); // Calculate square root
-                textfield.setText(String.valueOf(result)); // Display only the result
-                return; // Exit to prevent further evaluation
-            } catch (NumberFormatException ex) {
+                textfield.setText("√" + value + " = " + result); // Display the result
+            } 
+            catch (NumberFormatException ex) 
+            {
                 textfield.setText("Error - invalid input!");
-                return;
             }
-        } else {
+        } 
+        else 
+        {
             textfield.setText("Error - invalid input!");
-            return;
         }
     }
     // Check if cube root is being calculated
-    else if (expression.contains("∛")) {
+    else if (expression.contains("∛")) 
+    {
         // Extract the number after the cube root symbol
         String[] parts = expression.split("∛");
-        if (parts.length == 2 && !parts[1].isEmpty()) {
-            try {
+        if (parts.length == 2 && !parts[1].isEmpty()) 
+        {
+            try 
+            {
                 double value = Double.parseDouble(parts[1].trim()); // Get the number after cube root symbol
                 double result = Math.cbrt(value); // Calculate cube root
-                textfield.setText(String.valueOf(result)); // Display only the result
-                return; // Exit to prevent further evaluation
-            } catch (NumberFormatException ex) {
+                textfield.setText("∛" + value + " = " + result); // Display the result
+            } 
+            catch (NumberFormatException ex) 
+            {
                 textfield.setText("Error - invalid input!");
-                return;
             }
-        } else {
+        } 
+        else 
+        {
             textfield.setText("Error - invalid input!");
-            return;
         }
     }
-
-    // Handle other expressions normally
-    try {
-        // Evaluate factorial if present
-        expression = evaluateFactorial(expression);
-        double result = evaluateExpression(expression);
-        textfield.setText(String.valueOf(result)); // Display the result of other expressions
-    } catch (Exception ex) {
-        textfield.setText("Error: " + ex.getMessage());
+    else 
+    {
+        // Handle other expressions normally
+        try 
+        {
+            // Evaluate factorial if present
+            expression = evaluateFactorial(expression);
+            double result = evaluateExpression(expression);
+            textfield.setText(String.valueOf(result));
+        } 
+        catch (Exception ex) 
+        {
+            textfield.setText("Error: " + ex.getMessage());
+        }
     }
 }
-
+    if (e.getSource() == intButton)
+    {
+        Double d = Double.valueOf(textfield.getText().trim());
+        int i = d.intValue();
+        textfield.setText(String.valueOf(i));
+    }
+    
     if (e.getSource() == clearButton) 
     { //Clear Button
         textfield.setText("");
