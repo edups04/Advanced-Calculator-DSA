@@ -57,7 +57,7 @@ public class DoublePiCalc extends JFrame {
         int d = Integer.parseInt(dField.getText());
 
         // Calculate double products
-        long result1 = 1, result2 = 1, result3 = 1;
+        long result1 = 1, result2 = 1, result3 = 1, result4 = 1;
 
         // ΠΠ (x + y)
         for (int i = a; i <= b; i++) {
@@ -73,16 +73,20 @@ public class DoublePiCalc extends JFrame {
             }
         }
 
-        // ΠΠ (x * y) (a=1, b=2, c=1, d=2)
-        for (int i = 1; i <= 2; i++) {
-            for (int j = 1; j <= 2; j++) {
-                result3 *= (i * j);
+        // ΠΠ (x^y)
+        for (int i = a; i <= b; i++) {
+            for (int j = c; j <= d; j++) {
+                result4 *= Math.pow(i, j);
             }
         }
 
         // Display results
         resultArea.setText("ΠΠ (x + y): " + result1 + "\n");
         resultArea.append("ΠΠ (x * y): " + result2 + "\n");
-        resultArea.append("ΠΠ (x * y) (a=1, b=2, c=1, d=2): " + result3);
+        resultArea.append("ΠΠ (x^y): " + result4);
+    }
+
+    public static void main(String[] args) {
+        new DoublePiCalc();
     }
 }
