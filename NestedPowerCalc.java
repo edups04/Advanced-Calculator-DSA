@@ -12,22 +12,22 @@ public class NestedPowerCalc {
         frame = new JFrame("Nested Power Calculator");
 
         // Input for base (x)
-        JLabel baseLabel = new JLabel("Enter base (x):");
+        JLabel baseLabel = new JLabel("Enter base(x):");
         baseLabel.setBounds(20, 20, 150, 30);
         baseField = new JTextField();
         baseField.setBounds(150, 20, 150, 30);
 
         // Input for exponent (y)
-        JLabel exponentLabel = new JLabel("Enter exponent (y):");
+        JLabel exponentLabel = new JLabel("Enter exponent(y):");
         exponentLabel.setBounds(20, 60, 150, 30);
         exponentField = new JTextField();
         exponentField.setBounds(150, 60, 150, 30);
 
         // Input for nested exponent (z)
-        JLabel nestedExponentLabel = new JLabel("Enter nested exponent (z):");
+        JLabel nestedExponentLabel = new JLabel("Enter nested exponent(z):");
         nestedExponentLabel.setBounds(20, 100, 150, 30);
         nestedExponentField = new JTextField();
-        nestedExponentField.setBounds(150, 100, 150, 30);
+        nestedExponentField.setBounds(180, 100, 120, 30);
 
         // Calculate button
         calculateButton = new JButton("Calculate");
