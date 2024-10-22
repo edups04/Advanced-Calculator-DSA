@@ -304,52 +304,47 @@ public class Calculator implements ActionListener
         textfield.setText(textfield.getText().concat("."));
     }
 
-    if (e.getSource() == summationButton) 
-    { // summation
-        try 
-        {
-            String startInput = JOptionPane.showInputDialog(null, "Enter start value");
-            String endInput = JOptionPane.showInputDialog(null, "Enter end value");
+   if (e.getSource() == summationButton) {   
+    try {
+        String startInput = JOptionPane.showInputDialog(null, "Enter start value:");
+        String endInput = JOptionPane.showInputDialog(null, "Enter end value:");
 
-            if (startInput != null && !startInput.isEmpty() && endInput != null && !endInput.isEmpty()) 
-            {
-                int start = Integer.parseInt(startInput);
-                int end = Integer.parseInt(endInput);
+        // Validate start and end input
+        if (startInput != null && !startInput.isEmpty() && endInput != null && !endInput.isEmpty()) {
+            int start = Integer.parseInt(startInput);
+            int end = Integer.parseInt(endInput);
 
-                if (start > end) 
-                {
-                    textfield.setText("Error - start value must be equal to the end value.");
-                    return;
-                }
-                String expressionInput = JOptionPane.showInputDialog(null, "Enter the expression (polynomial or any math expression):");
-
-                if (expressionInput != null && !expressionInput.isEmpty()) 
-                {
-                    double summationResult = 0;
-                    for (int x = start; x <= end; x++) 
-                    {
-                        double value = evaluatePolynomial(expressionInput, x);
-                        summationResult += value;
-                    }
-
-                    textfield.setText("Σ (" + expressionInput + ") from " + start + " to " + end + " = " + summationResult);
-                }
-                else 
-                {
-                    textfield.setText("Error - invalid expression!");
-                }
-            } 
-            else 
-            {
-                textfield.setText("Error - invalid range!");
+            if (start > end) {
+                textfield.setText("Error - start value must be less than or equal to the end value.");
+                return;
             }
-        } 
-        catch (NumberFormatException ex) 
-        {
-            textfield.setText("Error - invalid input!");
+
+            // Get the mathematical expression from the user
+            String expressionInput = JOptionPane.showInputDialog(null, "Enter the expression (polynomial or any math expression):");
+
+            if (expressionInput != null && !expressionInput.isEmpty()) {
+                double summationResult = 0;
+
+                // Perform the summation for each value from start to end
+                for (int x = start; x <= end; x++) {
+                    double value = evaluatePolynomial(expressionInput, x);
+                    summationResult += value;
+                }
+
+                // Display the result in the textfield
+                textfield.setText("Σ (" + expressionInput + ") from " + start + " to " + end + " = " + summationResult);
+            } else {
+                textfield.setText("Error - invalid expression!");
+            }
+        } else {
+            textfield.setText("Error - invalid range!");
         }
+    } catch (NumberFormatException ex) {
+        textfield.setText("Error - invalid input!");
+    } catch (Exception ex) {
+        textfield.setText("Error: " + ex.getMessage());
     }
-    
+}      
     if (e.getSource() == addButton) 
     { //Addition Button
         textfield.setText(textfield.getText().concat(" + "));
@@ -391,20 +386,50 @@ public class Calculator implements ActionListener
     }
     
   if (e.getSource() == equalButton) 
-    {
+{
     String expression = textfield.getText();
 
-    // Check if square root is being calculated
-    if (expression.contains("√")) {
+    // Handle floor division (//) case
+    if (expression.contains(" // ")) 
+    {
+        // Split the expression into two parts
+        String[] parts = expression.split(" // ");
+        if (parts.length == 2 && !parts[1].isEmpty()) 
+        {
+            try 
+            {
+                // Parse the numbers as integers
+                int dividend = Integer.parseInt(parts[0].trim());
+                int divisor = Integer.parseInt(parts[1].trim());
+                
+                // Perform floor division
+                int result = dividend / divisor;
+                
+                // Display the result
+                textfield.setText(String.valueOf(result));
+            } 
+            catch (NumberFormatException ex) 
+            {
+                textfield.setText("Error - invalid input!");
+            }
+        } 
+        else 
+        {
+            textfield.setText("Error - invalid input!");
+        }
+    }
+    // Other conditions remain unchanged
+    else if (expression.contains("√")) 
+    {
         // Extract the number after the square root symbol
         String[] parts = expression.split("√");
         if (parts.length == 2 && !parts[1].isEmpty()) 
         {
             try 
             {
-                double value = Double.parseDouble(parts[1].trim()); // Get the number after square root symbol
-                double result = Math.sqrt(value); // Calculate square root
-                textfield.setText("√" + value + " = " + result); // Display the result
+                double value = Double.parseDouble(parts[1].trim());
+                double result = Math.sqrt(value);
+                textfield.setText("√" + value + " = " + result);
             } 
             catch (NumberFormatException ex) 
             {
@@ -416,18 +441,17 @@ public class Calculator implements ActionListener
             textfield.setText("Error - invalid input!");
         }
     }
-    // Check if cube root is being calculated
+    // Handle cube root
     else if (expression.contains("∛")) 
     {
-        // Extract the number after the cube root symbol
         String[] parts = expression.split("∛");
         if (parts.length == 2 && !parts[1].isEmpty()) 
         {
             try 
             {
-                double value = Double.parseDouble(parts[1].trim()); // Get the number after cube root symbol
-                double result = Math.cbrt(value); // Calculate cube root
-                textfield.setText("∛" + value + " = " + result); // Display the result
+                double value = Double.parseDouble(parts[1].trim());
+                double result = Math.cbrt(value);
+                textfield.setText("∛" + value + " = " + result);
             } 
             catch (NumberFormatException ex) 
             {
@@ -439,12 +463,11 @@ public class Calculator implements ActionListener
             textfield.setText("Error - invalid input!");
         }
     }
+    // Handle other expressions
     else 
     {
-        // Handle other expressions normally
         try 
         {
-            // Evaluate factorial if present
             expression = evaluateFactorial(expression);
             double result = evaluateExpression(expression);
             textfield.setText(String.valueOf(result));
@@ -503,7 +526,7 @@ public class Calculator implements ActionListener
 
                     for (int x = start; x <= end; x++) 
                     {
-                        double value = evaluatePolynomial(expressionInput, x);
+                        double value = evaluatePolynomial(expressionInput, x);  
                         productResult *= value;
                     }
 
@@ -724,11 +747,12 @@ public class Calculator implements ActionListener
     }
     
      if (e.getSource() == intDivButton) 
-    { // Floor Division Button
-        textfield.setText(textfield.getText().concat(" // "));
-        operator = '/'; // Set to the same operator for future evaluation
-    }
+{   // Floor Division Button
+    textfield.setText(textfield.getText().concat(" // "));
+    operator = '/';
+
 }  
+    }
 
     //helper functions
     private double calculateDoubleSummation(String input) 
@@ -786,38 +810,40 @@ public class Calculator implements ActionListener
         return product;
     }
 
-    private double evaluatePolynomial(String expression, double x) 
-    {
-        expression = expression.replace(" ", "").replace("^", "**");
-        double result = 0;
-        String[] terms = expression.split("\\+|(?=-)");
+       private double evaluatePolynomial(String expression, double x) {
+    expression = expression.replace(" ", "").replace("^", "**");
+    double result = 0;
 
-        for (String term : terms) 
-        {
-            double coefficient = 1;
-            double exponent = 0;
+    // Split by + and - while keeping the signs
+    String[] terms = expression.split("(?=\\+)|(?=-)");
 
-            if (term.contains("x**")) 
-            {
-                String[] parts = term.split("x\\*\\*");
-                coefficient = parts[0].isEmpty() ? 1 : Double.parseDouble(parts[0]);
-                exponent = Double.parseDouble(parts[1]);
-            } 
-            else if (term.contains("x")) 
-            {
-                String[] parts = term.split("x");
-                coefficient = parts[0].isEmpty() ? 1 : Double.parseDouble(parts[0]);
-                exponent = 1;
-            } 
-            else 
-            {
-                coefficient = Double.parseDouble(term);
-                exponent = 0;
+    for (String term : terms) {
+        double coefficient = 1;
+        double exponent = 0;
+
+        // Handle cases with 'x' or without
+        if (term.contains("x")) {
+            String[] parts = term.split("x");
+            if (parts[0].isEmpty() || parts[0].equals("+")) {
+                coefficient = 1; // Implicit coefficient of 1
+            } else if (parts[0].equals("-")) {
+                coefficient = -1; // Implicit coefficient of -1
+            } else {
+                coefficient = Double.parseDouble(parts[0]); // Explicit coefficient
             }
-            result += coefficient * Math.pow(x, exponent);
+            exponent = 1; // Default exponent for 'x' is 1
+        } else {
+            // It's a constant term
+            coefficient = Double.parseDouble(term);
+            exponent = 0; // Constant terms have exponent 0
         }
-        return result;
+
+        result += coefficient * Math.pow(x, exponent);
     }
+    return result;
+}
+
+
     
     public double evaluateExpression(String expression) {
     expression = expression.replaceAll("\\s+", "");  // Remove any spaces from the expression
