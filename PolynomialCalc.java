@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
  * The only thing that this supports is the basic Power rule for both Differentiation
  * and integration.
  * Please do NOT expect something like a complex triple integral here
- * OR chain rule and definite integrals. That's way out of our league, 
+ * OR chain rule and definite integrals. That's way out of my league, 
  * we only have Calc 1 under our belt.
  */
 public class PolynomialCalc extends JFrame 
@@ -21,32 +21,29 @@ public class PolynomialCalc extends JFrame
          * Window details. In this section, the specifications of the window is placed.
          */
         setTitle("Differentiation and Integration");
-        setSize(800, 150); // Adjusted window height
+        setSize(600, 100);
         setFont(new Font("Poppins", Font.PLAIN, 30));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLayout(new BorderLayout(10, 10));
-        setLocationRelativeTo(null); 
+        setLayout(new BorderLayout());
 
         /*
          * This contains the details and contents of the buttons.
          * There are only two buttons here.
          */
         inputField = new JTextField();
-        inputField.setFont(new Font("Poppins", Font.PLAIN, 16));
         JButton derivativeButton = new JButton("Find d/dx");
         JButton integralButton = new JButton("Find ∫");
         outputArea = new JTextArea();
         outputArea.setEditable(false);
-        outputArea.setFont(new Font("Poppins", Font.BOLD, 18));
 
         // Panel arrangement. This section contains the arrangement of the entire window.
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(1, 2, 10, 10));
-        buttonPanel.add(derivativeButton);
-        buttonPanel.add(integralButton);
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(1, 2));
+        panel.add(derivativeButton);
+        panel.add(integralButton);
 
         add(inputField, BorderLayout.NORTH);
-        add(buttonPanel, BorderLayout.CENTER);
+        add(panel, BorderLayout.CENTER);
         add(new JScrollPane(outputArea), BorderLayout.SOUTH);
 
         /*
@@ -319,15 +316,28 @@ public class PolynomialCalc extends JFrame
 
             result.append(termBuilder);
         }
-        return result.length() == 0 ? "0" : result.toString();
+
+        if (result.length() == 0) 
+        {
+            return "0";
+        }
+
+        String finalResult = result.toString().trim();
+
+        if (finalResult.startsWith("+")) 
+        {
+            finalResult = finalResult.substring(1).trim();
+        }
+
+        return finalResult;
     }
 
-    /*
-     * Launches the GUI window to be displayed to the user.
-     * This is also connected to the main Calculator class.
-     */
+    // Main class. We obviously call this one.
     public static void main(String[] args) 
     {
-        SwingUtilities.invokeLater(() -> new PolynomialCalc().setVisible(true));
+        SwingUtilities.invokeLater(() -> 
+        {
+            new PolynomialCalc().setVisible(true);
+        });
     }
 }
