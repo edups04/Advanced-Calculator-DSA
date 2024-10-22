@@ -9,7 +9,7 @@ class Design extends JButton {
     public Design (String label, int radius) {
         super(label);
         this.radius = radius;
-        setFont(new Font("Tahoma", Font.PLAIN, 30)); 
+        setFont(new Font("SansSerif", Font.PLAIN, 30)); 
         setFocusPainted(false); 
         setContentAreaFilled(false); 
         setOpaque(false); 
